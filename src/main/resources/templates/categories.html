@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Категории | ITforum.ru</title>
+
+    <!-- Для Spring -->
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/main.css}">
+
+    <!-- Для верстки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../static/main.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="container header-inner">
+        <div class="logo">
+            <a class="logo-link" href="/" th:href="@{/}">
+                <h1>ITforum.ru</h1>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="/categories">Категории</a>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <h2>Категории форума</h2>
+        <p>Выберите интересующий вас раздел</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="categories-page">
+        <div th:if="${#maps.size(categories)==0}" class="categories-empty-notice">
+            <p class="empty-notice-title">Категорий пока нет</p>
+            <a href="\new-category" class="create-category-btn">Создать категорию</a>
+        </div>
+        <a th:if="${#maps.size(categories)!=0}"
+           th:each="category : ${categories}"
+           th:href="@{'/categories/'+${category.key}}"
+           href="/categories/test"
+           class="category-item">
+            <div class="category-content">
+                <h3 th:text="${category.value.name}">Название</h3>
+                <p th:text="${category.value.description}">Описание</p>
+                <div class="category-meta">
+                    <span class="posts"><i class="far fa-comment-dots"></i>Публикаций:
+                         <span th:text="${category.value.posts != null ? #lists.size(category.value.posts) : 0}">0</span>
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="copyright">
+            © 2026 ITforum.ru | Все права защищены.
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
+</html>

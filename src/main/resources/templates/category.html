@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${category.name} + ' | ITforum.ru'"></title>
+
+    <!-- Для Spring -->
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/main.css}">
+
+    <!-- Для верстки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../static/main.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="container header-inner">
+        <div class="logo">
+            <a class="logo-link" href="/" th:href="@{/}">
+                <h1>ITforum.ru</h1>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="/categories">Категории</a>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <p class="hero-breadcrumb">
+            <a href="/categories" th:href="@{/categories}"><i class="fas fa-arrow-left"></i> Все категории</a>
+        </p>
+        <h2 th:text="${category.name}">AI & Data Science</h2>
+        <p th:text="${category.description}">Машинное обучение, нейросети, анализ данных и большие языковые модели</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="category-view">
+        <h3 class="category-view-heading">Публикации в разделе</h3>
+        <ul class="publication-list">
+            <li th:each="post : ${posts}">
+                <a th:href="@{'/post/' + ${post.key}}" href="#" class="publication-preview">
+                    <div class="publication-preview-main">
+                        <span th:text="'#'+${post.key}" class="publication-id">#1842</span>
+                        <span th:text="${post.value.title}" class="publication-title">Fine-tuning Llama 3 на своём датасете: с чего начать?</span>
+                        <p th:text="${post.value.short_desc}" class="publication-excerpt">Кратко про формат данных, learning rate, оценку качества и типичные ошибки при дообучении под задачу классификации.</p>
+                    </div>
+                    <div class="publication-preview-meta">
+                        <span class="publication-age" title="Пример относительного времени" th:text="${post.value.timeFromNow}"><i class="far fa-clock"></i></span>
+                        <span th:text="'Комментариев: ' + ${post.value.comments != null ? #lists.size(post.value.comments) : 0}" class="publication-comments"> 23 комментария</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="copyright">
+            © 2026 ITforum.ru | Все права защищены.
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
