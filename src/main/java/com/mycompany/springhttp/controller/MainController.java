@@ -4,6 +4,7 @@ import com.mycompany.springhttp.dto.CategoryDTO;
 import com.mycompany.springhttp.dto.PostDTO;
 import com.mycompany.springhttp.service.CategoryService;
 import com.mycompany.springhttp.service.PostService;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,20 @@ public class MainController {
     @GetMapping("/")
     public String HomePage() {
         return "home";
+    }
+    
+    @PostMapping("/")
+    public String HomePage(
+            @RequestParam(name = "id") String id,
+            Model model
+    ) {
+        Set<String> postsNum = servP.getMap().keySet();
+        if (postsNum.contains(id)) {
+            return "redirect:/post/" + id;
+        } else {
+            model.addAttribute("PostNE", id);
+            return "home";
+        }
     }
 
     

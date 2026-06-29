@@ -1,77 +1,63 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Форум | ITforum.ru</title>
 
-    <!-- Для Spring -->
-    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css}">
-    <link rel="stylesheet" th:href="@{/main.css}">
+<head th:replace="fragments.html :: head(title='ITForum - Главная')"></head>
 
-    <!-- Для верстки -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../static/main.css">
-</head>
 <body>
 
-<header class="header">
-    <div class="container header-inner">
-        <div class="logo">
-            <a class="logo-link" href="/" th:href="@{/}">
-                <h1>ITforum.ru</h1>
-            </a>
-        </div>
-        <div class="nav-links">
-            <a href="/categories">Категории</a>
-        </div>
-    </div>
-</header>
+    <header th:insert="fragments.html :: header"></header>
 
-<section class="hero hero-home">
-    <div class="container">
-        <h2>Открыть тему по номеру</h2>
-        <div class="search-bar search-bar--home">
-            <label class="search-bar-label visually-hidden" for="topic-id-search">Номер темы</label>
-            <input id="topic-id-search" type="text" placeholder="Введите ID" inputmode="numeric" autocomplete="off">
-            <button type="button">Открыть</button>
-        </div>
-    </div>
-</section>
+    <section class="hero hero-home">
+        <div class="container">
+            <h2>Открыть тему по номеру</h2>
 
-<div class="container">
-    <div class="home-sections">
-        <section class="home-panel">
-            <div class="home-panel__top">
-                <span class="home-panel__icon home-panel__icon--topic" aria-hidden="true"><i class="fas fa-pen"></i></span>
-                <div class="home-panel__intro">
-                    <h3 class="home-panel__title">Новая тема</h3>
-                    <p class="home-panel__lead">Укажите заголовок и текст — другие пользователи смогут ответить в обсуждении под записью.</p>
-                </div>
+            <div class="search-section">
+
+                <form class="search-bar search-bar--home" action="/" method="POST">
+                    <label class="visually-hidden" for="post-id-search">Номер поста</label>
+                    <input name="id" type="text" placeholder="Введите номер поста" inputmode="numeric"
+                        autocomplete="off">
+                    <button type="submit">Найти</button>
+                </form>
+
+                <p th:if="${PostNE}" style="color: red; margin-top: 5px;" class="search-error">Поста с номером <strong th:text="${PostNE}"></strong> не
+                    существует!</p>
             </div>
-            <a href="/post" class="home-panel__cta">Заполнить форму</a>
-        </section>
+        </div>
+    </section>
 
-        <section class="home-panel">
-            <div class="home-panel__top">
-                <span class="home-panel__icon home-panel__icon--category" aria-hidden="true"><i class="fas fa-folder-plus"></i></span>
-                <div class="home-panel__intro">
-                    <h3 class="home-panel__title">Новая категория</h3>
-                    <p class="home-panel__lead">Так появляется отдельный раздел в общем списке — внутри него позже размещаются обсуждения по одной области.</p>
-                </div>
-            </div>
-            <a href="/new-category" class="home-panel__cta">Заполнить форму</a>
-        </section>
-    </div>
-</div>
-
-<footer class="footer">
     <div class="container">
-        <div class="copyright">
-            © 2026 ITforum.ru | Все права защищены.
+        <div class="home-sections">
+            <section class="home-panel">
+                <div class="home-panel__top">
+                    <span class="home-panel__icon home-panel__icon--topic" aria-hidden="true"><i
+                            class="fas fa-pen"></i></span>
+                    <div class="home-panel__intro">
+                        <h3 class="home-panel__title">Новая тема</h3>
+                        <p class="home-panel__lead">Укажите заголовок и текст — другие пользователи смогут ответить в
+                            обсуждении под записью.</p>
+                    </div>
+                </div>
+                <a href="/post" class="home-panel__cta">Заполнить форму</a>
+            </section>
+
+            <section class="home-panel">
+                <div class="home-panel__top">
+                    <span class="home-panel__icon home-panel__icon--category" aria-hidden="true"><i
+                            class="fas fa-folder-plus"></i></span>
+                    <div class="home-panel__intro">
+                        <h3 class="home-panel__title">Новая категория</h3>
+                        <p class="home-panel__lead">Так появляется отдельный раздел в общем списке — внутри него позже
+                            размещаются обсуждения по одной области.</p>
+                    </div>
+                </div>
+                <a href="/new-category" class="home-panel__cta">Заполнить форму</a>
+            </section>
         </div>
     </div>
-</footer>
+
+    <footer th:insert="fragments.html :: footer"></footer>
 
 </body>
+
 </html>

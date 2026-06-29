@@ -1,91 +1,52 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Создать категорию | ITforum.ru</title>
 
-    <!-- Для Spring -->
-    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css}">
-    <link rel="stylesheet" th:href="@{/main.css}">
+<head th:replace="fragments.html :: head(title='Создать категорию')"></head>
 
-    <!-- Для верстки -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../static/main.css">
-</head>
 <body>
 
-<header class="header">
-    <div class="container header-inner">
-        <div class="logo">
-            <a class="logo-link" href="/" th:href="@{/}">
-                <h1>ITforum.ru</h1>
-            </a>
-        </div>
-        <div class="nav-links">
-            <a href="/categories">Категории</a>
-        </div>
-    </div>
-</header>
+    <header th:insert="fragments.html :: header"></header>
 
-<section class="hero">
+    <section class="hero">
+        <div class="container">
+            <h2>Создание новой категории</h2>
+            <p>Добавьте новый раздел, чтобы структурировать обсуждения сообщества</p>
+        </div>
+    </section>
+
     <div class="container">
-        <h2>Создание новой категории</h2>
-        <p>Добавьте новый раздел, чтобы структурировать обсуждения сообщества</p>
+        <form class="topic-form category-form" action="/new-category/create" method="POST">
+            <div class="form-group">
+                <label for="category_id">Идентификатор категории</label>
+                <input type="text" id="category_id" name="category_id" class="category-id-input"
+                    placeholder="Например: backend-java" required>
+                <span th:if="${alreadyExists!=null}" style="color: red;" class="form-hint">Категория с ID <strong
+                        th:text="${alreadyExists}"></strong> уже существует!</span>
+                <span th:if="${alreadyExists==null}" class="form-hint">Используйте короткий уникальный идентификатор
+                    латиницей.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="category_name">Название категории</label>
+                <input type="text" name="name" placeholder="Например: Java & Spring" required>
+            </div>
+
+            <div class="form-group">
+                <label for="category_description">Описание категории</label>
+                <textarea id="description" name="description" rows="6"
+                    placeholder="Опишите, какие темы обсуждаются в этой категории и для кого она предназначена."
+                    required></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="reset" class="btn-secondary">Очистить</button>
+                <button type="submit" class="btn-secondary">Создать категорию</button>
+            </div>
+        </form>
     </div>
-</section>
 
-<div class="container">
-    <form class="topic-form category-form" action="/new-category/create" method="POST">
-        <div class="form-group">
-            <label for="category_id">Идентификатор категории</label>
-            <input
-                type="text"
-                id="category_id"
-                name="category_id"
-                class="category-id-input"
-                placeholder="Например: backend-java"
-                required
-            >
-            <span th:if="${alreadyExists!=null}" style="color: red;" class="form-hint">Категория с ID <strong th:text="${alreadyExists}"></strong> уже существует!</span> 
-            <span th:if="${alreadyExists==null}" class="form-hint">Используйте короткий уникальный идентификатор латиницей.</span>
-        </div>
-
-        <div class="form-group">
-            <label for="category_name">Название категории</label>
-            <input
-                type="text"
-                name="name"
-                placeholder="Например: Java & Spring"
-                required
-            >
-        </div>
-
-        <div class="form-group">
-            <label for="category_description">Описание категории</label>
-            <textarea
-                id="description"
-                name="description"
-                rows="6"
-                placeholder="Опишите, какие темы обсуждаются в этой категории и для кого она предназначена."
-                required
-            ></textarea>
-        </div>
-
-        <div class="form-actions">
-            <button type="reset" class="btn-secondary">Очистить</button>
-            <button type="submit" class="btn-secondary">Создать категорию</button>
-        </div>
-    </form>
-</div>
-
-<footer class="footer">
-    <div class="container">
-        <div class="copyright">
-            © 2026 ITforum.ru | Все права защищены.
-        </div>
-    </div>
-</footer>
+    <footer th:insert="fragments.html :: footer"></footer>
 
 </body>
+
 </html>

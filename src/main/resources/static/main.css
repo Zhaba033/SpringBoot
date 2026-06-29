@@ -139,6 +139,28 @@ body {
     border: 0;
 }
 
+.search-section {
+    margin-top: 24px;
+}
+
+.search-section__title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #475569;
+    margin-bottom: 12px;
+}
+
+.search-error {
+    color: #dc2626;
+    font-size: 0.9rem;
+    margin-top: 12px;
+    padding-left: 4px;
+}
+
+.search-error strong {
+    color: #dc2626;
+}
+
 .search-bar {
     max-width: 440px;
     margin: 0 auto;
