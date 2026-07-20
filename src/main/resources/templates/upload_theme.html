@@ -14,24 +14,20 @@
         </div>
     </section>
 
-    <div th:if="${#lists.contains(roles, 'BANNED')}" class="banned-banner">
-        <div class="banned-banner__icon">
-            <i class="fas fa-ban"></i>
-        </div>
-        <div class="banned-banner__content">
-            <strong>ВЫ ЗАБАНЕНЫ!</strong>
-            <span>Вы не можете создавать посты, будучи в бане.</span>
-        </div>
-    </div>
+    <div th:insert="fragments.html :: banned(text='Вы не можете создавать посты, будучи в бане.')"></div>
 
-    <div th:if="${!#lists.contains(roles, 'BANNED')}" class="container">
+    <div th:insert="fragments.html :: register(text='Чтобы загружать посты.')"></div>
+
+    <div sec:authorize="hasRole('ROLE_USER')" class="container">
         <form class="topic-form" th:action="@{/theme_upload}" method="POST">
             <div class="form-group">
-                <label for="category">Выберите раздел</label>
+                <label for="category">Выберите категорию</label>
                 <select name="category" required>
                     <option th:each="entry : ${cats}" th:value="${entry.key}" th:text="${entry.value}"></option>
                 </select>
             </div>
+
+            <input type="hidden" name="author" th:value="${#authentication.name}">
 
             <div class="form-group">
                 <label for="title">Заголовок</label>
@@ -39,15 +35,8 @@
             </div>
 
             <div class="form-group">
-                <label for="short_desc">Краткое описание</label>
-                <input type="text" name="short_desc" placeholder="Коротко о чём тема (1-2 предложения)" required>
-            </div>
-
-            <div class="form-group">
-                <label for="full_desc">Полное описание</label>
-                <textarea name="full_desc" rows="6"
-                    placeholder="Подробно опишите вопрос, проблему или идею. Укажите, что уже пробовали сделать, какие ошибки возникают."
-                    required></textarea>
+                <label for="body">Основная часть</label>
+                <textarea name="body" placeholder="" rows="8" required></textarea>
             </div>
 
             <div class="form-group">

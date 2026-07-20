@@ -28,7 +28,7 @@
                         <div class="publication-preview-main">
                             <span th:text="'#'+${post.key}" class="publication-id">#1842</span>
                             <span th:text="${post.value.title}" class="publication-title">Заголовок</span>
-                            <p th:text="${post.value.short_desc}" class="publication-excerpt">Краткое описание</p>
+                            <p th:text="${post.value.body}" class="publication-excerpt">Краткое описание</p>
                         </div>
                         <div class="publication-preview-meta">
                             <span class="publication-age" title="Пример относительного времени"
@@ -41,12 +41,7 @@
                             </span>
                         </div>
                     </a>
-                    <form th:if="${#lists.contains(roles, 'MODERATOR')}" class="mod-delete" method="post" th:action="@{/moderator/post/} + ${post.key} + @{/delete}">
-                        <input type="hidden" name="id" value="1842">
-                        <button type="submit" class="mod-delete__btn" title="Удалить пост" aria-label="Удалить пост">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </form>
+                    <form th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${post.key} + @{/delete})"></form>
                 </li>
             </ul>
         </div>

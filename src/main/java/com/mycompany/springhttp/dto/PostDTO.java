@@ -7,18 +7,16 @@ import lombok.Data;
 
 @Data
 public class PostDTO {
+    
+    String author;
     String category;
     String title;
-    String short_desc;
-    String full_desc;
+    String body;
     String code;
+    String id;
     
     String timeFromNow = "";
     LocalDateTime createdDate;
     
     Map<String, CommentDTO> comments = new HashMap<>();
-    
-    public void removeComment(String id) {
-        comments.remove(id);
-    }
 }

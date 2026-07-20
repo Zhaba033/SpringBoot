@@ -1,6 +1,5 @@
 package com.mycompany.springhttp.controller;
 
-import com.mycompany.springhttp.dto.AccountDTO;
 import com.mycompany.springhttp.dto.CategoryDTO;
 import com.mycompany.springhttp.dto.PostDTO;
 import com.mycompany.springhttp.service.AccountService;
@@ -11,10 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class CustomController {
 
-    @Autowired
-    private CategoryService servC;
-
-    @Autowired
-    private PostService servP;
-
-    @Autowired
-    private AccountService servA;
+    @Autowired private PostService servP;
+    @Autowired private CategoryService servC;
+    @Autowired private AccountService servA;
 
     // CATEGORIES
     @GetMapping("/categories/{c}")
@@ -42,10 +35,6 @@ public class CustomController {
         if (!servC.getCats().keySet().contains(c)) {
             return "404";
         }
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        AccountDTO user = servA.getUserByName(auth.getName());
-        model.addAttribute("roles", user.getRoles());
 
         CategoryDTO cat = servC.getCats().get(c);
 
@@ -67,10 +56,8 @@ public class CustomController {
     // POSTS
     @GetMapping("/post/{c}")
     public String PostPage(@PathVariable String c,
-            Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        AccountDTO user = servA.getUserByName(auth.getName());
-        model.addAttribute("roles", user.getRoles());
+        Model model) {
+        
         if (!servP.getMap().keySet().contains(c)) {
             return "404";
         }
@@ -82,7 +69,7 @@ public class CustomController {
 
         model.addAttribute("post", post);
         model.addAttribute("id", c);
-        model.addAttribute("comments", servP.get_coms(c));
+        model.addAttribute("comments", servP.get_coms(c, servA));
         model.addAttribute("date", formatted);
 
         return "post";
@@ -91,10 +78,10 @@ public class CustomController {
 
     @PostMapping("/post/{c}")
     public String PostPageComment(@PathVariable String c,
-            @RequestParam(name = "nickname") String nickname,
+            @RequestParam(name = "username") String username,
             @RequestParam(name = "comment") String comment) {
 
-        servP.add_comment(c, nickname, comment);
+        servP.add_comment(c, username, comment, servA.getUserByName(username).getRoles());
 
         return "redirect:/post/" + c;
 
@@ -107,12 +94,15 @@ public class CustomController {
         return "redirect:/categories";
     }
 
-    @PostMapping("/moderator/post/{id}/delete")
-    public String removePost(@PathVariable String id) {
-        log.info(servP.getMap().toString());
+    @PostMapping(value={"/moderator/post/{id}/delete", "/moderator/post/{id}/delete/{from}"})
+    public String removePost(@PathVariable String id, @PathVariable Optional<String> from) {
         String postCategory = servP.getMap().get(id).getCategory();
         servP.removePost(id);
         servC.removePostFromCat(postCategory, id);
+        log.info(from.get());
+        if (from.isPresent() && from.get().equals("home")) {
+            return "redirect:/";
+        }
         return "redirect:/categories/" + postCategory;
     }
 
@@ -121,5 +111,4 @@ public class CustomController {
         servP.removeComm(postId, commId);
         return "redirect:/post/" + postId;
     }
-
 }

@@ -27,7 +27,7 @@ public class MyUserDetailsService implements UserDetailsService{
         List<String> roles = null;
 
         
-        Map<String, AccountDTO> accounts = as.getUserData();
+        Map<String, AccountDTO> accounts = as.getAccounts();
         
         if (accounts.containsKey(username)) {
             password = accounts.get(username).getPassword();

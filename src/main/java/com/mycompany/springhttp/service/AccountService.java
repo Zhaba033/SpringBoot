@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -47,13 +48,17 @@ public class AccountService {
     }
     
     // PUBLIC METHODS
-    public Map<String, AccountDTO> getUserData() {
+    public Map<String, AccountDTO> getAccounts() {
         return accounts;
+    }
+    
+    public List<String> getUserRoles(String nickname) {
+        return accounts.get(nickname).getRoles();
     }
     
     public void createNewAccount(String username, AccountDTO account) {
         account.setCreatedTime(LocalDateTime.now());
-        account.add_role("USER");
+        account.getRoles().add("USER");
         accounts.put(username, account);
         writeJson();
     }

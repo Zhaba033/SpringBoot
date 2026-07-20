@@ -19,9 +19,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(auth -> auth
-                .antMatchers("/css/**")
+                /*.antMatchers("/css/**")
                 .permitAll()
                 .antMatchers("/auth/**")
+                .permitAll()*/
+                .antMatchers("/**")
                 .permitAll()
                 .antMatchers("/moderator/**")
                 .hasRole("MODERATOR")

@@ -27,15 +27,70 @@
                         Аккаунт <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </button>
                     <div class="account-dropdown__menu" role="menu">
-                        <a href="/profile" class="account-dropdown__item" role="menuitem">Профиль</a>
-                        <!--<a href="/login" class="account-dropdown__item" role="menuitem">Вход</a>
-                        <a href="/register" class="account-dropdown__item" role="menuitem">Регистрация</a>-->
-                        <a href="/logout_confirm" style="color: rgb(218, 18, 18);" class="account-dropdown__item" role="menuitem">Выйти</a>
+                        <div sec:authorize="isAuthenticated()">
+                            <a href="/profile" class="account-dropdown__item" role="menuitem">Профиль</a>
+                            <a href="/logout_confirm" style="color: rgb(218, 18, 18);" class="account-dropdown__item"
+                                role="menuitem">Выйти</a>
+                        </div>
+
+                        <div sec:authorize="!isAuthenticated()">
+                            <a href="/auth/login" class="account-dropdown__item" role="menuitem">Вход</a>
+                            <a href="/auth/register" class="account-dropdown__item" role="menuitem">Регистрация</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
+
+    <div th:fragment="banned (text)" sec:authorize="hasRole('ROLE_BANNED')" class="banned-banner">
+        <div class="banned-banner__icon">
+            <i class="fas fa-ban"></i>
+        </div>
+        <div class="banned-banner__content">
+            <strong>Вы забанены!</strong>
+            <span th:text="${text}">Вы не можете создавать категории, будучи в бане.</span>
+        </div>
+    </div>
+
+    <a th:fragment="register (text)" sec:authorize="!isAuthenticated()" href="/auth/login" class="register-banner">
+        <div class="register-banner__icon">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        <div class="register-banner__content">
+            <strong>Войдите</strong>
+            <span th:text="${text}">Чтобы оставлять комментарии</span>
+        </div>
+        <div class="register-banner__arrow">
+            <i class="fas fa-arrow-right"></i>
+        </div>
+    </a>
+
+
+
+    <span th:fragment="your_roles">
+        <span sec:authorize="hasRole('ROLE_USER')" class="profile-card__role_user">Пользователь</span>
+        <span sec:authorize="hasRole('ROLE_MODERATOR')" class="profile-card__role_moderator">Модератор</span>
+        <span sec:authorize="hasRole('ROLE_BANNED')" class="profile-card__role_banned">Забанен</span>
+    </span>
+
+    <span th:fragment="roles (roles)">
+        <span th:if="${#lists.contains(roles, 'USER')}" class="profile-card__role_user">Пользователь</span>
+        <span th:if="${#lists.contains(roles, 'MODERATOR')}" class="profile-card__role_moderator">Модератор</span>
+        <span th:if="${#lists.contains(roles, 'BANNED')}" class="profile-card__role_banned">Забанен</span>
+    </span>
+
+
+
+    <form th:fragment="delete (path)" sec:authorize="hasRole('ROLE_MODERATOR')" class="mod-delete" method="post"
+        th:action="${path}">
+        <input type="hidden" name="id" value="1842">
+        <button type="submit" class="mod-delete__btn" title="Удалить пост" aria-label="Удалить пост">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </form>
+
+
 
     <footer th:fragment="footer" class="footer">
         <div class="container">

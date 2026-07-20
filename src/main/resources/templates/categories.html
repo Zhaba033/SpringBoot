@@ -33,13 +33,8 @@
                         </div>
                     </div>
                 </a>
-                <form th:if="${#lists.contains(roles, 'MODERATOR')}" class="mod-delete" method="post" th:action="@{/moderator/categories/} + ${category.key} + @{/delete}">
-                    <input type="hidden" name="id" value="example-category">
-                    <button type="submit" class="mod-delete__btn" title="Удалить категорию"
-                        aria-label="Удалить категорию">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </form>
+
+                <form th:replace="fragments.html :: delete(path=@{/moderator/categories/} + ${category.key} + @{/delete})"></form>
             </div>
         </div>
     </div>

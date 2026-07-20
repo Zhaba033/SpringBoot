@@ -19,25 +19,16 @@ public class CategoryService {
     private Map<String, CategoryDTO> cats;
     private File catsJson = new File("files/json/categories.json");
     
+    // CONSTRUCTOR
+    
     public CategoryService(ObjectMapper objectMapper) {
         om = objectMapper;
         initJson();
     }
     
-    public Map<String, CategoryDTO> getMap() {
-        return cats;
-    }
+    // PRIVATE METHODS
     
-    public void add(String shortname, CategoryDTO cat) {
-        cats.put(shortname, cat);
-        writeJson();
-    }
-
-    public Map<String, CategoryDTO> getCats() {
-        return cats;
-    }
-    
-    private void writeJson() {
+        private void writeJson() {
         try {
             om.writerWithDefaultPrettyPrinter()
                     .writeValue(catsJson, cats);
@@ -54,6 +45,23 @@ public class CategoryService {
             //log.error(e.getMessage());
         }
     }
+    
+    // PUBLIC
+    
+    public Map<String, CategoryDTO> getMap() {
+        return cats;
+    }
+    
+    public void add(String shortname, CategoryDTO cat) {
+        cats.put(shortname, cat);
+        writeJson();
+    }
+
+    public Map<String, CategoryDTO> getCats() {
+        return cats;
+    }
+    
+
     
     public Map<String, String> catsIdName() {
         Map<String, String> mapa = new HashMap();
@@ -73,7 +81,7 @@ public class CategoryService {
         if (cats.get(catId).getPosts() == null) {
             cats.get(catId).setPosts(new ArrayList<>());
         }
-        cats.get(catId).add_post(postId);
+        cats.get(catId).getPosts().add(postId);
         writeJson();
     }
     
@@ -85,7 +93,8 @@ public class CategoryService {
     }
     
     public void removePostFromCat(String cat, String post) {
-        cats.get(cat).remove_post(post);
+        cats.get(cat).getPosts().remove(post);
+        writeJson();
     }
     
     

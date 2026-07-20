@@ -1,16 +1,13 @@
 package com.mycompany.springhttp.controller;
 
-import com.mycompany.springhttp.dto.AccountDTO;
 import com.mycompany.springhttp.dto.CategoryDTO;
 import com.mycompany.springhttp.dto.PostDTO;
-import com.mycompany.springhttp.service.AccountService;
 import com.mycompany.springhttp.service.CategoryService;
 import com.mycompany.springhttp.service.PostService;
+import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,18 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class MainController {
 
-    @Autowired
-    private PostService servP;
-
-    @Autowired
-    private CategoryService servC;
-    
-    @Autowired
-    private AccountService servA;
+    @Autowired private PostService servP;
+    @Autowired private CategoryService servC;
 
     // HOME
     @GetMapping("/")
-    public String HomePage() {
+    public String HomePage(Model model) {
+        List<PostDTO> recentPosts = servP.getRecentPosts(3);
+        model.addAttribute("posts", recentPosts);
         return "home";
     }
     
@@ -56,9 +49,6 @@ public class MainController {
     // POSTS
     @GetMapping("/theme")
     public String uploadPostPage(Model model) {
-         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        AccountDTO user = servA.getUserByName(auth.getName());
-        model.addAttribute("roles", user.getRoles());
         model.addAttribute("cats", servC.catsIdName());
         return "upload_theme";
     }
@@ -66,7 +56,7 @@ public class MainController {
     @PostMapping("/theme_upload")
     public String uploadPost(@ModelAttribute PostDTO post) {
         servC.addPostToCat(post.getCategory(), Integer.toString(servP.add(post)));
-        return "redirect:/";
+        return "redirect:/post/" + post.getId();
     }
 
     
@@ -74,9 +64,6 @@ public class MainController {
     // CATS
     @GetMapping("/new-category")
     public String createCategoryPage(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        AccountDTO user = servA.getUserByName(auth.getName());
-        model.addAttribute("roles", user.getRoles());
         return "create_category";
     }
 
@@ -100,10 +87,8 @@ public class MainController {
     @GetMapping("/categories")
     public String allCatsPage(Model model) {
         //log.info(servC.getCats().toString());
-         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        AccountDTO user = servA.getUserByName(auth.getName());
-        model.addAttribute("roles", user.getRoles());
         model.addAttribute("categories", servC.getCats());
         return "categories";
     }
+    
 }

@@ -15,49 +15,27 @@
             </p>
 
             <div class="post-card moderable-item">
-                <form th:if="${#lists.contains(roles, 'MODERATOR')}" class="mod-delete" method="post"
-                    th:action="@{/moderator/post/} + ${id} + @{/delete}">
-                    <input type="hidden" name="id" value="1842">
-                    <button type="submit" class="mod-delete__btn" title="Удалить пост" aria-label="Удалить пост">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </form>
+                <form th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${id} + @{/delete})"></form>
+
                 <span th:text="'#' + ${id}" class="post-id">#1842</span>
-                <h1 th:text="${post.title}" class="post-title">Fine-tuning Llama 3 на своём датасете: с чего начать?
-                </h1>
-                <p th:text="${post.short_desc}" class="post-short-desc">Кратко про формат данных, learning rate и
-                    типичные ошибки при дообучении под задачу классификации.</p>
-                <div th:text="${post.full_desc}" class="post-full-desc">
-                    <p>Я собрал небольшой датасет из размеченных диалогов и хочу дообучить Llama 3 под классификацию
-                        намерений пользователя. Пробовал learning rate 2e-5 и 5e-5 — на валидации вторая сходимость
-                        быстрее, но на тесте модель начинает переобучаться.</p>
-                    <p>Подскажите, с чего лучше начать: какой формат JSON для обучения вы используете, как оцениваете
-                        качество до выкладки в прод, и на что обратить внимание при подготовке данных. Буду благодарен
-                        за примеры конфигов и типичные ошибки, которые вы уже встречали.</p>
-                </div>
-                <p th:text="'Создано: ' + ${date}" class="post-created"><i class="far fa-calendar-alt"></i> Создано: 12
-                    мая 2026, 14:30</p>
+                <h1 th:text="${post.title}" class="post-title">Заголовок</h1>
+                <p th:text="${post.body}" class="post-body">Описание</p>
+                <p th:text="'Создано: ' + ${date}" class="post-created">Дата</p>
+                <span th:text="'Автор: ' + ${post.author}" class="post-created"></span>
             </div>
 
             <section class="post-comments">
                 <h2 class="post-comments__heading">Комментарии</h2>
 
-                <div th:if="${#lists.contains(roles, 'BANNED')}" class="banned-banner">
-                    <div class="banned-banner__icon">
-                        <i class="fas fa-ban"></i>
-                    </div>
-                    <div class="banned-banner__content">
-                        <strong>ВЫ ЗАБАНЕНЫ!</strong>
-                        <span>Вы не можете оставлять комментарии, будучи в бане.</span>
-                    </div>
-                </div>
+                <div th:insert="fragments.html :: banned(text='Вы не можете оставлять комментарии, будучи в бане.')"></div>
 
-                <form th:if="${!#lists.contains(roles, 'BANNED')}" class="comment-form" th:action="@{#}" method="post">
+                <div th:insert="fragments.html :: register(text='Чтобы оставлять комментарии.')"></div>
+
+                <form sec:authorize="hasRole('ROLE_USER')" class="comment-form" th:action="@{#}" method="post">
+                    <p style="margin-bottom: 10px; margin-left: 3px;">Вы напишете под именем: <strong
+                            sec:authentication="name">Имя пользователя</strong></p>
                     <div class="form-group">
-                        <input type="text" maxlength="20" name="nickname" placeholder="Аноним" value="Аноним">
-                    </div>
-                    <div class="form-group">
-                        <label for="comment-text">Комментарий</label>
+                        <input type="hidden" name="username" th:value="${#authentication.name}">
                         <textarea name="comment" rows="3" placeholder="Напишите ответ или уточняющий вопрос"
                             required></textarea>
                     </div>
@@ -68,16 +46,13 @@
 
                 <ul class="comment-list">
                     <li th:each="com : ${comments}" class="comment-item moderable-item">
-                        <form th:if="${#lists.contains(roles, 'MODERATOR')}" class="mod-delete" method="post"
-                            th:action="@{/moderator/post/} + ${id} + @{/comment/} + ${com.id} + @{/delete}">
-                            <input type="hidden" name="id" value="1">
-                            <button type="submit" class="mod-delete__btn" title="Удалить комментарий"
-                                aria-label="Удалить комментарий">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
-                        <p th:text="${com.username}" class="comment-item__author">Алексей</p>
-                        <p th:text="${com.comment}" class="comment-item__text">Какой-то комментарий</p>
+                        <form th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${id} + @{/comment/} + ${com.id} + @{/delete})"></form>
+
+                        <p class="comment-item__author">
+                            <span th:text="${com.author}">ник</span>
+                            <span th:insert="fragments.html :: roles(roles=${com.userRoles})">Роли</span>
+                        </p>
+                        <p th:text="${com.comment}" class="comment-item__text">Комментарий</p>
                         <p th:text="${com.timeFromNow}" class="comment-item__time"><i class="far fa-clock"></i> 2 часа
                             назад</p>
                     </li>

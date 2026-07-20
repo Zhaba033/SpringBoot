@@ -33,6 +33,35 @@
         </div>
     </div>
 
+    <section class="recent-posts">
+            <h2 class="recent-posts__title">
+                <i class="fas fa-clock" style="color: #2563eb;"></i> Последние посты
+            </h2>
+            <ul class="publication-list">
+
+                <li th:each="post : ${posts}" class="moderable-item">
+                    <a th:href="@{/post/} + ${post.id}" href="#" class="publication-preview">
+                        <div class="publication-preview-main">
+                            <span th:text="'#' + ${post.id}" class="publication-id">#1842</span>
+                            <span th:text="${post.title}" class="publication-title">Титле</span>
+                            <p th:text="${post.body}" class="publication-excerpt">Описание</p>
+                            <span th:text="'Категория: ' + ${post.category}" class="publication-category">Категория</span>
+                        </div>
+                        <div class="publication-preview-meta">
+                            <span th:text="${post.timeFromNow}" class="publication-age">
+                                <i class="far fa-clock"></i> 2 часа назад
+                            </span>
+                            <span th:text="'Комментариев: ' + ${#maps.size(post.comments)}" class="publication-comments">
+                                <i class="far fa-comment"></i> 23 комментария
+                            </span>
+                        </div>
+                        <form th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${post.id} + @{/delete/home})"></form>
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </div>
+
     <footer th:insert="fragments.html :: footer"></footer>
 
 </body>

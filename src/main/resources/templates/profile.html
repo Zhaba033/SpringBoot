@@ -31,9 +31,7 @@
                 <div class="profile-card__row">
                     <dt>Роль</dt>
                     <dd>
-                        <span th:if="${#lists.contains(roles, 'USER')}" class="profile-card__role_user">Пользователь</span>
-                        <span th:if="${#lists.contains(roles, 'MODERATOR')}" class="profile-card__role_moderator">Модератор</span>
-                        <span th:if="${#lists.contains(roles, 'BANNED')}" class="profile-card__role_banned">Забанен</span>
+                        <span th:insert="fragments.html :: your_roles"></span>
                     </dd>
                 </div>
             </dl>

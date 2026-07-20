@@ -59,7 +59,7 @@ public class SecurityController {
 
         String error = null;
 
-        if (servA.getUserData().keySet().contains(account.getUsername())) {
+        if (servA.getAccounts().keySet().contains(account.getUsername())) {
             error = "userAlreadyExists";
         } else if (account.getPassword().length() < 3) {
             error = "tooShortPassw";

@@ -1,26 +1,68 @@
 {
-  "3" : {
-    "category" : "java",
-    "title" : "Как создать свой сайт?",
-    "short_desc" : "Мне надо что-то учить?",
-    "full_desc" : "А то у чата гпт попросить просто можно и всё",
+  "2" : {
+    "author" : "DELETED_ACCOUNT",
+    "category" : "offtop",
+    "title" : "Поделитесь своими успехами",
+    "body" : "Расскажите, чего вы добились за весь свой опыт программирования!",
     "code" : "",
-    "timeFromNow" : "23 часа назад",
-    "createdDate" : "2026-07-19T13:30:40.8081026",
+    "id" : "2",
+    "timeFromNow" : "3 часа назад",
+    "createdDate" : "2026-07-20T15:42:28.4375281",
     "comments" : {
       "1" : {
-        "username" : "Аноним",
-        "comment" : "a",
+        "author" : "igor",
+        "comment" : "asd",
         "id" : "1",
-        "timeFromNow" : "2 часа назад",
-        "createdTime" : "2026-07-20T10:58:59.41161"
+        "userRoles" : [ "USER" ],
+        "timeFromNow" : "57 минут назад",
+        "createdTime" : "2026-07-20T15:53:19.8260116"
       },
-      "5" : {
-        "username" : "Аноним",
-        "comment" : "Тут типа коменты снизу вверх идут вот\r\n",
-        "id" : "5",
-        "timeFromNow" : "2 часа назад",
-        "createdTime" : "2026-07-20T11:03:02.9939013"
+      "2" : {
+        "author" : "testuser",
+        "comment" : "Я в твои годы уже таких сайтов 20 сделал, работай больше\r\n",
+        "id" : "2",
+        "userRoles" : [ "BANNED" ],
+        "timeFromNow" : "42 минуты назад",
+        "createdTime" : "2026-07-20T16:08:41.762486"
+      },
+      "3" : {
+        "author" : "admin",
+        "comment" : "Ты красавчик, я забанил этого типа, надо уважать труд других",
+        "id" : "3",
+        "userRoles" : [ "USER", "MODERATOR" ],
+        "timeFromNow" : "",
+        "createdTime" : "2026-07-20T16:51:30.1494257"
+      }
+    }
+  },
+  "3" : {
+    "author" : "igor",
+    "category" : "java",
+    "title" : "Как понять принципы ООП",
+    "body" : "Я не понимаю принципы ООП",
+    "code" : "",
+    "id" : "3",
+    "timeFromNow" : "2 часа назад",
+    "createdDate" : "2026-07-20T16:29:45.8924409",
+    "comments" : { }
+  },
+  "4" : {
+    "author" : "igor",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "code" : "",
+    "id" : "4",
+    "timeFromNow" : "2 часа назад",
+    "createdDate" : "2026-07-20T16:43:47.4844574",
+    "comments" : {
+      "1" : {
+        "author" : "admin",
+        "comment" : "k",
+        "id" : "1",
+        "userRoles" : [ "USER", "MODERATOR" ],
+        "timeFromNow" : "",
+        "createdTime" : "2026-07-20T17:59:28.8041213"
       }
     }
   }

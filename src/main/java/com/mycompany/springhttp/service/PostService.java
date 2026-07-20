@@ -30,6 +30,7 @@ public class PostService {
     private final ObjectMapper om;
     private Map<String, PostDTO> posts;
     private final File postsJson = new File("files/json/posts.json");
+    private final PrettyTime prettyTime = new PrettyTime(new Date());
     
     // PRIVATE METHODS ------------------
     private void writeJson() {
@@ -54,6 +55,21 @@ public class PostService {
         }
     }
     
+        
+    private void updatePostsData() {
+        for (Map.Entry<String, PostDTO> entry : posts.entrySet()) {
+            entry.getValue().setTimeFromNow(prettyTime.format(Date.from(entry.getValue().getCreatedDate().atZone(ZoneId.systemDefault()).toInstant())));
+        }
+    }
+    
+    private void updateCommsData(String postId, AccountService as) { // обновляет информацию в комментариях: роли пользователя, время с публикации
+        PostDTO post = posts.get(postId);
+        for (Map.Entry<String, CommentDTO> entry : post.getComments().entrySet()) {
+            entry.getValue().setTimeFromNow(prettyTime.format(Date.from(entry.getValue().getCreatedTime().atZone(ZoneId.systemDefault()).toInstant())));
+            entry.getValue().setUserRoles(as.getUserRoles(entry.getValue().getAuthor()));
+        }
+    }
+    
     // CONSTRUCTOR ------------------
     public PostService(ObjectMapper objectMapper) {
         om = objectMapper;
@@ -66,18 +82,11 @@ public class PostService {
     }
     
     public Map<String, PostDTO> getPostsById(List<String> ids) {
+        updatePostsData();
         Map<String, PostDTO> result = new LinkedHashMap();
         
         for (String i : ids) {
-            
             PostDTO curPost = posts.get(i);
-            
-            
-            PrettyTime prettyTime = new PrettyTime(new Date());
-            String timeFromNow = prettyTime.format(Date.from(curPost.getCreatedDate().atZone(ZoneId.systemDefault()).toInstant()));
-            
-            
-            posts.get(i).setTimeFromNow(timeFromNow);
             result.put(i, curPost);
         }
         
@@ -86,33 +95,47 @@ public class PostService {
     
     public int add(PostDTO post) {
         post.setCreatedDate(LocalDateTime.now());
+        post.setId(String.valueOf(id));
         posts.put(String.valueOf(id), post);
         id++;
         writeJson();
         return id-1;
     }
     
-    public void add_comment(String i, String us, String c) { // id, username, comment
+    public void add_comment(String i, String us, String c, List<String> userRoles) { // id, username, comment
         PostDTO post = posts.get(i);
         Map<String, CommentDTO> coms = post.getComments();
-        CommentDTO newCom = new CommentDTO(us, c, LocalDateTime.now());
+        CommentDTO newCom = new CommentDTO();
+        
+        newCom.setAuthor(us);
+        newCom.setComment(c);
+        newCom.setCreatedTime(LocalDateTime.now());
+        newCom.setUserRoles(userRoles);
+        
         newCom.setId(String.valueOf(coms.size()+1));
         coms.put(String.valueOf(coms.size()+1), newCom);
         post.setComments(coms);
         writeJson();
     }
     
-    public List<CommentDTO> get_coms(String i) {
-        PostDTO post = posts.get(i);
-        List<CommentDTO> coms = new ArrayList<>();
-        PrettyTime prettyTime = new PrettyTime(new Date());
-        for (CommentDTO c : post.getComments().values()) {
-            c.setTimeFromNow(prettyTime.format(Date.from(c.getCreatedTime().atZone(ZoneId.systemDefault()).toInstant())));
-            coms.add(c);
-        }
+    public List<CommentDTO> get_coms(String i, AccountService as) {
+        updateCommsData(i, as);
+        List<CommentDTO> coms = new ArrayList(posts.get(i).getComments().values());
         Collections.reverse(coms);
         return coms;
     }
+    
+    public List<PostDTO> getRecentPosts(int count) {
+        updatePostsData();
+        List<PostDTO> p = new ArrayList(posts.values());
+        if (count > posts.size()) {
+            count = posts.size();
+        }
+        Collections.reverse(p);
+        p = p.subList(0, count);
+        return p;
+    }
+    
     
     // REMOVE
     
@@ -122,7 +145,7 @@ public class PostService {
     }
     
     public void removeComm(String postId, String commId) {
-        posts.get(postId).removeComment(commId);
+        posts.get(postId).getComments().remove(commId);
         writeJson();
     }
     
