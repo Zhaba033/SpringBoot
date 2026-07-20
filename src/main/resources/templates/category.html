@@ -23,24 +23,30 @@
         <div class="category-view">
             <h3 class="category-view-heading">Публикации в разделе</h3>
             <ul class="publication-list">
-                <li th:each="post : ${posts}">
+                <li th:each="post : ${posts}" class="moderable-item">
                     <a th:href="@{'/post/' + ${post.key}}" href="#" class="publication-preview">
                         <div class="publication-preview-main">
                             <span th:text="'#'+${post.key}" class="publication-id">#1842</span>
-                            <span th:text="${post.value.title}" class="publication-title">Fine-tuning Llama 3 на своём
-                                датасете: с чего начать?</span>
-                            <p th:text="${post.value.short_desc}" class="publication-excerpt">Кратко про формат данных,
-                                learning rate, оценку качества и типичные ошибки при дообучении под задачу
-                                классификации.</p>
+                            <span th:text="${post.value.title}" class="publication-title">Заголовок</span>
+                            <p th:text="${post.value.short_desc}" class="publication-excerpt">Краткое описание</p>
                         </div>
                         <div class="publication-preview-meta">
                             <span class="publication-age" title="Пример относительного времени"
-                                th:text="${post.value.timeFromNow}"><i class="far fa-clock"></i></span>
+                                th:text="${post.value.timeFromNow}"><i class="far fa-clock"></i>
+                            </span>
+                            
                             <span
-                                th:text="'Комментариев: ' + ${post.value.comments != null ? #lists.size(post.value.comments) : 0}"
-                                class="publication-comments"> 23 комментария</span>
+                                th:text="'Комментариев: ' + ${#maps.size(post.value.comments)}"
+                                class="publication-comments"> 23 комментария
+                            </span>
                         </div>
                     </a>
+                    <form th:if="${#lists.contains(roles, 'MODERATOR')}" class="mod-delete" method="post" th:action="@{/moderator/post/} + ${post.key} + @{/delete}">
+                        <input type="hidden" name="id" value="1842">
+                        <button type="submit" class="mod-delete__btn" title="Удалить пост" aria-label="Удалить пост">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>

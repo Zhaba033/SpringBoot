@@ -14,7 +14,14 @@
                 <a th:href="'/categories/' + ${post.category}"><i class="fas fa-arrow-left"></i> К разделу</a>
             </p>
 
-            <div class="post-card">
+            <div class="post-card moderable-item">
+                <form th:if="${#lists.contains(roles, 'MODERATOR')}" class="mod-delete" method="post"
+                    th:action="@{/moderator/post/} + ${id} + @{/delete}">
+                    <input type="hidden" name="id" value="1842">
+                    <button type="submit" class="mod-delete__btn" title="Удалить пост" aria-label="Удалить пост">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </form>
                 <span th:text="'#' + ${id}" class="post-id">#1842</span>
                 <h1 th:text="${post.title}" class="post-title">Fine-tuning Llama 3 на своём датасете: с чего начать?
                 </h1>
@@ -35,7 +42,17 @@
             <section class="post-comments">
                 <h2 class="post-comments__heading">Комментарии</h2>
 
-                <form class="comment-form" action="#" method="post">
+                <div th:if="${#lists.contains(roles, 'BANNED')}" class="banned-banner">
+                    <div class="banned-banner__icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <div class="banned-banner__content">
+                        <strong>ВЫ ЗАБАНЕНЫ!</strong>
+                        <span>Вы не можете оставлять комментарии, будучи в бане.</span>
+                    </div>
+                </div>
+
+                <form th:if="${!#lists.contains(roles, 'BANNED')}" class="comment-form" th:action="@{#}" method="post">
                     <div class="form-group">
                         <input type="text" maxlength="20" name="nickname" placeholder="Аноним" value="Аноним">
                     </div>
@@ -50,7 +67,15 @@
                 </form>
 
                 <ul class="comment-list">
-                    <li th:each="com : ${comments}" class="comment-item">
+                    <li th:each="com : ${comments}" class="comment-item moderable-item">
+                        <form th:if="${#lists.contains(roles, 'MODERATOR')}" class="mod-delete" method="post"
+                            th:action="@{/moderator/post/} + ${id} + @{/comment/} + ${com.id} + @{/delete}">
+                            <input type="hidden" name="id" value="1">
+                            <button type="submit" class="mod-delete__btn" title="Удалить комментарий"
+                                aria-label="Удалить комментарий">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
                         <p th:text="${com.username}" class="comment-item__author">Алексей</p>
                         <p th:text="${com.comment}" class="comment-item__text">Какой-то комментарий</p>
                         <p th:text="${com.timeFromNow}" class="comment-item__time"><i class="far fa-clock"></i> 2 часа

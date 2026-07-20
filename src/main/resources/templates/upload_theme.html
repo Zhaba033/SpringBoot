@@ -14,8 +14,18 @@
         </div>
     </section>
 
-    <div class="container">
-        <form class="topic-form" action="/post/upload" method="POST">
+    <div th:if="${#lists.contains(roles, 'BANNED')}" class="banned-banner">
+        <div class="banned-banner__icon">
+            <i class="fas fa-ban"></i>
+        </div>
+        <div class="banned-banner__content">
+            <strong>ВЫ ЗАБАНЕНЫ!</strong>
+            <span>Вы не можете создавать посты, будучи в бане.</span>
+        </div>
+    </div>
+
+    <div th:if="${!#lists.contains(roles, 'BANNED')}" class="container">
+        <form class="topic-form" th:action="@{/theme_upload}" method="POST">
             <div class="form-group">
                 <label for="category">Выберите раздел</label>
                 <select name="category" required>
@@ -25,7 +35,7 @@
 
             <div class="form-group">
                 <label for="title">Заголовок</label>
-                <input type="text" name="title" placeholder="Например: Проблема с асинхронностью в Python" required>
+                <input type="text" name="title" placeholder="" required>
             </div>
 
             <div class="form-group">

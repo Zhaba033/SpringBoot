@@ -7,6 +7,7 @@ import lombok.Data;
 public class CommentDTO {
     String username;
     String comment;
+    String id;
     
     String timeFromNow = "";
     LocalDateTime createdTime;

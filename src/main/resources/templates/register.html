@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head th:replace="fragments.html :: head(title='Регистрация')"></head>
+
+<body>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Регистрация</h2>
+        </div>
+    </section>
+
+    <div class="container">
+        <form class="auth-form" th:action="@{/auth/perform_register}" method="POST">
+            <div class="form-group">
+                <label for="register-username">Имя пользователя</label>
+                <input type="text" name="username" placeholder="Придумайте логин" required>
+                <span th:if="${error=='userAlreadyExists'}" class="error">Пользователь с таким именем пользователя уже зарегистрирован.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="register-password">Пароль</label>
+                <input type="password" name="password" placeholder="Создайте надёжный пароль" required>
+                <span th:if="${error=='tooShortPassw'}" class="error">Ваш пароль должен быть не короче 3 символов.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="register-password-repeat">Повторите пароль</label>
+                <input type="password" name="password_repeat" placeholder="Введите пароль ещё раз" required>
+                <span th:if="${error=='diffPassw'}" class="error">Ваши пароли не совпадают.</span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Создать аккаунт</button>
+            </div>
+
+            <p class="auth-form__switch">
+                Уже есть аккаунт? <a href="/auth/login">Войти</a>
+            </p>
+        </form>
+    </div>
+
+    <footer th:insert="fragments.html :: footer"></footer>
+
+</body>
+
+</html>

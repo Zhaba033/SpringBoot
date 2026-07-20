@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://thymeleaf.org/extras/spring-security">
 
 <head th:fragment="head (title)">
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
     <title th:text="${title}">Title</title>
 
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css}">
-    <link rel="stylesheet" th:href="@{/main.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 
 </head>
 
@@ -22,6 +22,17 @@
             </div>
             <div class="nav-links">
                 <a href="/categories">Категории</a>
+                <div class="account-dropdown">
+                    <button type="button" class="account-dropdown__toggle" aria-haspopup="true" aria-expanded="false">
+                        Аккаунт <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="account-dropdown__menu" role="menu">
+                        <a href="/profile" class="account-dropdown__item" role="menuitem">Профиль</a>
+                        <!--<a href="/login" class="account-dropdown__item" role="menuitem">Вход</a>
+                        <a href="/register" class="account-dropdown__item" role="menuitem">Регистрация</a>-->
+                        <a href="/logout_confirm" style="color: rgb(218, 18, 18);" class="account-dropdown__item" role="menuitem">Выйти</a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>

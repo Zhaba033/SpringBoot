@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru">
 
-<head th:replace="fragments.html :: head(title='Страница не найдена!')"></head>
+<head th:replace="fragments.html :: head(title='Страница не найдена')"></head>
 
 
 <body>
 
     <header th:insert="fragments.html :: header"></header>
 
-    <div class="fhf">
-        <h1 style="font-size: 167px; text-shadow: 2px 2px 4px black;">404</h1>
-        <h2>Упс! Похоже, что страницы, которую вы ищете, не существует.</h2>
+    <div class="container">
+        <section class="error-page">
+            <p class="error-page__code" aria-hidden="true">404</p>
+            <h1 class="error-page__title">Страница не найдена</h1>
+            <p class="error-page__text">Такой адрес не существует или был удалён, проверьте ссылку или вернитесь на предыдущую страницу.</p>
+        </section>
     </div>
 
     <footer th:insert="fragments.html :: footer"></footer>
 </body>
+
+</html>

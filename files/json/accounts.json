@@ -1,0 +1,20 @@
+{
+  "igor" : {
+    "username" : "igor",
+    "password" : "123",
+    "roles" : ["USER"],
+    "createdTime" : "2026-07-19T11:30:13.519195"
+  },
+  "admin" : {
+    "username" : "admin",
+    "password" : "longpassword123",
+    "roles" : ["USER", "MODERATOR"],
+    "createdTime" : "2026-07-19T12:01:52.6453052"
+  },
+  "baduser" : {
+    "username" : "baduser",
+    "password" : "123",
+    "roles" : ["BANNED"],
+    "createdTime" : "2026-07-20T11:39:12.2058514"
+  }
+}

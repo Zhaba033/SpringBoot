@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head th:replace="fragments.html :: head(title='Вход')"></head>
+
+<body>
+
+    <header th:insert="fragments.html :: header"></header>
+
+    <section class="hero">
+        <h2 class="logout-success__title">Успешный выход из аккаунта</h2>
+        <div style="margin-top: 30px; margin-bottom: 30px;" class="logout-success__links">
+            <a href="/auth/login" class="logout-success__link">Войти</a>
+            <span class="logout-success__divider">|</span>
+            <a href="/auth/register" class="logout-success__link">Зарегистрироваться</a>
+        </div>
+    </section>
+
+    <footer th:insert="fragments.html :: footer"></footer>
+
+</body>
+
+</html>

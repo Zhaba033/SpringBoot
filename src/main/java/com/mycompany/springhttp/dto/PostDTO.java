@@ -1,8 +1,8 @@
 package com.mycompany.springhttp.dto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Data;
 
 @Data
@@ -16,5 +16,9 @@ public class PostDTO {
     String timeFromNow = "";
     LocalDateTime createdDate;
     
-    List<CommentDTO> comments = new ArrayList<>();
+    Map<String, CommentDTO> comments = new HashMap<>();
+    
+    public void removeComment(String id) {
+        comments.remove(id);
+    }
 }

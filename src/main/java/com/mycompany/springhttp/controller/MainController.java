@@ -1,12 +1,16 @@
 package com.mycompany.springhttp.controller;
 
+import com.mycompany.springhttp.dto.AccountDTO;
 import com.mycompany.springhttp.dto.CategoryDTO;
 import com.mycompany.springhttp.dto.PostDTO;
+import com.mycompany.springhttp.service.AccountService;
 import com.mycompany.springhttp.service.CategoryService;
 import com.mycompany.springhttp.service.PostService;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +27,9 @@ public class MainController {
 
     @Autowired
     private CategoryService servC;
+    
+    @Autowired
+    private AccountService servA;
 
     // HOME
     @GetMapping("/")
@@ -47,13 +54,16 @@ public class MainController {
     
     // -------------------------
     // POSTS
-    @GetMapping("/post")
+    @GetMapping("/theme")
     public String uploadPostPage(Model model) {
+         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        AccountDTO user = servA.getUserByName(auth.getName());
+        model.addAttribute("roles", user.getRoles());
         model.addAttribute("cats", servC.catsIdName());
         return "upload_theme";
     }
 
-    @PostMapping("/post/upload")
+    @PostMapping("/theme_upload")
     public String uploadPost(@ModelAttribute PostDTO post) {
         servC.addPostToCat(post.getCategory(), Integer.toString(servP.add(post)));
         return "redirect:/";
@@ -63,7 +73,10 @@ public class MainController {
     // -------------------------
     // CATS
     @GetMapping("/new-category")
-    public String createCategoryPage() {
+    public String createCategoryPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        AccountDTO user = servA.getUserByName(auth.getName());
+        model.addAttribute("roles", user.getRoles());
         return "create_category";
     }
 
@@ -87,6 +100,9 @@ public class MainController {
     @GetMapping("/categories")
     public String allCatsPage(Model model) {
         //log.info(servC.getCats().toString());
+         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        AccountDTO user = servA.getUserByName(auth.getName());
+        model.addAttribute("roles", user.getRoles());
         model.addAttribute("categories", servC.getCats());
         return "categories";
     }

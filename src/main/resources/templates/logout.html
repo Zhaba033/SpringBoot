@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head th:replace="fragments.html :: head(title='Выход из аккаунта')"></head>
+
+<body>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Выход из аккаунта</h2>
+            <p>Подтвердите действие, чтобы завершить текущую сессию</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="logout-card">
+            <p class="logout-card__label">Пользователь:</p>
+            <p th:text="${username}" class="logout-card__username">igor_dev</p>
+            <p class="logout-card__question">Вы уверены, что хотите выйти из аккаунта?</p>
+
+            <div class="logout-card__actions">
+                <a href="/logout" class="btn-primary logout-card__btn">Выйти</a>
+                <a href="/" class="btn-secondary logout-card__btn">Отмена</a>
+            </div>
+        </section>
+    </div>
+
+    <footer th:insert="fragments.html :: footer"></footer>
+</body>
+
+</html>

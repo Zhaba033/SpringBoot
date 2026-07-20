@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.springhttp.dto.CommentDTO;
 import com.mycompany.springhttp.dto.PostDTO;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.stereotype.Component;
@@ -48,7 +50,7 @@ public class PostService {
             id++;
         } catch (IOException e) {
             posts = new HashMap();
-            //log.error(e.getMessage());
+            log.error("Error: ", e);
         }
     }
     
@@ -69,10 +71,11 @@ public class PostService {
         for (String i : ids) {
             
             PostDTO curPost = posts.get(i);
-            //log.info(i, ids.toString());
+            
             
             PrettyTime prettyTime = new PrettyTime(new Date());
             String timeFromNow = prettyTime.format(Date.from(curPost.getCreatedDate().atZone(ZoneId.systemDefault()).toInstant()));
+            
             
             posts.get(i).setTimeFromNow(timeFromNow);
             result.put(i, curPost);
@@ -91,9 +94,10 @@ public class PostService {
     
     public void add_comment(String i, String us, String c) { // id, username, comment
         PostDTO post = posts.get(i);
-        List<CommentDTO> coms = post.getComments();
+        Map<String, CommentDTO> coms = post.getComments();
         CommentDTO newCom = new CommentDTO(us, c, LocalDateTime.now());
-        coms.add(newCom);
+        newCom.setId(String.valueOf(coms.size()+1));
+        coms.put(String.valueOf(coms.size()+1), newCom);
         post.setComments(coms);
         writeJson();
     }
@@ -102,12 +106,24 @@ public class PostService {
         PostDTO post = posts.get(i);
         List<CommentDTO> coms = new ArrayList<>();
         PrettyTime prettyTime = new PrettyTime(new Date());
-        for (CommentDTO c : post.getComments()) {
+        for (CommentDTO c : post.getComments().values()) {
             c.setTimeFromNow(prettyTime.format(Date.from(c.getCreatedTime().atZone(ZoneId.systemDefault()).toInstant())));
             coms.add(c);
         }
         Collections.reverse(coms);
         return coms;
+    }
+    
+    // REMOVE
+    
+    public void removePost(String id) {
+        posts.remove(id);
+        writeJson();
+    }
+    
+    public void removeComm(String postId, String commId) {
+        posts.get(postId).removeComment(commId);
+        writeJson();
     }
     
 }

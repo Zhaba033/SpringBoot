@@ -14,7 +14,17 @@
         </div>
     </section>
 
-    <div class="container">
+    <div th:if="${#lists.contains(roles, 'BANNED')}" class="banned-banner">
+        <div class="banned-banner__icon">
+            <i class="fas fa-ban"></i>
+        </div>
+        <div class="banned-banner__content">
+            <strong>ВЫ ЗАБАНЕНЫ!</strong>
+            <span>Вы не можете создавать категории, будучи в бане.</span>
+        </div>
+    </div>
+
+    <div th:if="${!#lists.contains(roles, 'BANNED')}" class="container">
         <form class="topic-form category-form" action="/new-category/create" method="POST">
             <div class="form-group">
                 <label for="category_id">Идентификатор категории</label>

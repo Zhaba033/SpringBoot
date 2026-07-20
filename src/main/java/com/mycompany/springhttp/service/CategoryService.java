@@ -77,6 +77,17 @@ public class CategoryService {
         writeJson();
     }
     
+    // REMOVE
+    
+    public void removeCat(String catId) {
+        cats.remove(catId);
+        writeJson();
+    }
+    
+    public void removePostFromCat(String cat, String post) {
+        cats.get(cat).remove_post(post);
+    }
+    
     
     
 }

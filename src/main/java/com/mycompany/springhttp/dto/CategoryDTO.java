@@ -14,4 +14,8 @@ public class CategoryDTO {
     public void add_post(String s) {
         posts.add(s);
     }
+    
+    public void remove_post(String s) {
+        posts.remove(s);
+    }
 }
