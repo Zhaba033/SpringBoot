@@ -7,55 +7,75 @@
 
     <header th:insert="fragments.html :: header"></header>
 
-    <section class="hero hero-home">
-        <div class="container">
-            <h2>Открыть тему по номеру</h2>
 
-            <div class="search-section">
+    <div class="site-wrapper">
 
-                <form class="search-bar search-bar--home" action="/" method="POST">
-                    <label class="visually-hidden" for="post-id-search">Номер поста</label>
-                    <input name="id" type="text" placeholder="Введите номер поста" inputmode="numeric"
-                        autocomplete="off">
-                    <button type="submit">Найти</button>
-                </form>
+        <div th:insert="fragments.html :: breadcrumbs(list=${breadcrumbs})"></div>
 
-                <p th:if="${PostNE}" style="color: red; margin-top: 5px;" class="search-error">Поста с номером <strong th:text="${PostNE}"></strong> не
-                    существует!</p>
-            </div>
-        </div>
-    </section>
+        <section class="homepage-block">
+            <h2 class="homepage-block__title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Самые популярные категории</span>
+                <a href="/categories" class="link" style="display: flex; justify-content: flex-end;">Все категории
+                    -></a>
+            </h2>
+            <ul class="publication-list">
 
-    <div class="container">
-        <div class="home-actions">
-            <a href="/theme" class="home-action">Создать новую тему</a>
-            <a href="/new-category" class="home-action">Создать новую категорию</a>
-        </div>
-    </div>
+                <div th:each="category : ${categories}" class="moderable-item">
+                    <a th:href="@{'/categories/'+${category.id}}" class="category-item">
+                        <div class="category-content">
+                            <h3 th:text="${category.name}">Название</h3>
+                            <p th:text="${category.description}">Описание</p>
+                            <div class="category-meta">
+                                <span class="posts"><i class="far fa-comment-dots"></i>Публикаций:
+                                    <span th:text="${category.posts != null ? #lists.size(category.posts) : 0}">0</span>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
 
-    <section class="recent-posts">
-            <h2 class="recent-posts__title">
-                <i class="fas fa-clock" style="color: #2563eb;"></i> Последние посты
+                    <form
+                        th:replace="fragments.html :: delete(path=@{/moderator/categories/} + ${category.id} + @{/delete})">
+                    </form>
+                </div>
+
+            </ul>
+        </section>
+
+        <section class="homepage-block" style="padding-top: 10px;">
+            <h2 class="homepage-block__title" style="display: flex; justify-content: space-between;align-items: center;">
+                <span>Последние посты</span>
+                <a href="/create-post" class="link" style="display: flex; justify-content: flex-end;">Создать свой
+                    -></a>
             </h2>
             <ul class="publication-list">
 
                 <li th:each="post : ${posts}" class="moderable-item">
                     <a th:href="@{/post/} + ${post.id}" href="#" class="publication-preview">
                         <div class="publication-preview-main">
-                            <span th:text="'#' + ${post.id}" class="publication-id">#1842</span>
-                            <span th:text="${post.title}" class="publication-title">Титле</span>
+                            <span th:text="'От: ' + ${post.author}" class="publication-comments">Автор</span>
+                            <span class="publication-title">
+                                <span th:text="${post.title}" ></span>
+                                <span style="margin-left: 10px;" th:text="'Категория: ' + ${post.category}" class="publication-category"></span>
+                            </span>
                             <p th:text="${post.body}" class="publication-excerpt">Описание</p>
-                            <span th:text="'Категория: ' + ${post.category}" class="publication-category">Категория</span>
                         </div>
                         <div class="publication-preview-meta">
                             <span th:text="${post.timeFromNow}" class="publication-age">
                                 <i class="far fa-clock"></i> 2 часа назад
                             </span>
-                            <span th:text="'Комментариев: ' + ${#maps.size(post.comments)}" class="publication-comments">
+                            <span th:text="'Комментариев: ' + ${#maps.size(post.comments)}"
+                                class="publication-comments">
                                 <i class="far fa-comment"></i> 23 комментария
                             </span>
+                            <div th:if="${#maps.size(post.comments)!=0}">
+                                <p th:each="entry, stat : ${post.comments}" th:if="${stat.last}" class="publication-age"
+                                 th:text="'Последний от ' + ${entry.value.author} +' ' + ${entry.value.timeFromNow}"> 
+                                </p>
+                            </div>
                         </div>
-                        <form th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${post.id} + @{/delete/home})"></form>
+                        <form
+                            th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${post.id} + @{/delete/home})">
+                        </form>
                     </a>
                 </li>
             </ul>

@@ -19,7 +19,7 @@
     <div th:insert="fragments.html :: register(text='Чтобы создавать категории.')"></div>
 
     <div sec:authorize="hasRole('ROLE_USER')" class="container">
-        <form class="topic-form category-form" th:action="@{/new-category/create}" method="POST">
+        <form class="topic-form category-form" th:action="@{/moderator/new-category/create}" method="POST">
             <div class="form-group">
                 <label for="category_id">Идентификатор категории</label>
                 <input type="text" id="category_id" name="category_id" class="category-id-input"

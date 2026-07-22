@@ -8,18 +8,18 @@
 
     <header th:insert="fragments.html :: header"></header>
 
-    <div class="container">
+    <div class="site-wrapper">
+
+        <div th:insert="fragments.html :: breadcrumbs(list=${breadcrumbs})"></div>
+
         <article class="post-view">
-            <p class="post-breadcrumb">
-                <a th:href="'/categories/' + ${post.category}"><i class="fas fa-arrow-left"></i> К разделу</a>
-            </p>
 
             <div class="post-card moderable-item">
                 <form th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${id} + @{/delete})"></form>
 
-                <span th:text="'#' + ${id}" class="post-id">#1842</span>
                 <h1 th:text="${post.title}" class="post-title">Заголовок</h1>
-                <p th:text="${post.body}" class="post-body">Описание</p>
+                <p th:text="${post.body}" class="post-body" style="white-space: pre;">Описание</p>
+                <pre th:if="${!#strings.isEmpty(post.code)}" style="margin-bottom: 15px;"><code th:text="${post.code}"></code></pre>
                 <p th:text="'Создано: ' + ${date}" class="post-created">Дата</p>
                 <span th:text="'Автор: ' + ${post.author}" class="post-created"></span>
             </div>

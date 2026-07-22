@@ -19,11 +19,11 @@
     <div th:insert="fragments.html :: register(text='Чтобы загружать посты.')"></div>
 
     <div sec:authorize="hasRole('ROLE_USER')" class="container">
-        <form class="topic-form" th:action="@{/theme_upload}" method="POST">
+        <form class="topic-form" th:action="@{/create-post/upload}" method="POST">
             <div class="form-group">
                 <label for="category">Выберите категорию</label>
                 <select name="category" required>
-                    <option th:each="entry : ${cats}" th:value="${entry.key}" th:text="${entry.value}"></option>
+                    <option th:each="entry : ${cats}" th:selected="${entry.key==category}" th:value="${entry.key}" th:text="${entry.value}"></option>
                 </select>
             </div>
 
@@ -41,9 +41,9 @@
 
             <div class="form-group">
                 <label for="code">Код</label>
-                <textarea name="code" rows="8"
-                    placeholder="Вставьте ваш код здесь&#10;Пример:&#10;def hello():&#10;    print('Hello, world!')"></textarea>
-                <span class="form-hint">Можно вставить код на любом языке. Необязательное поле.</span>
+                <textarea id="textarea" name="code" rows="8"
+                    placeholder="Вставьте ваш код здесь"></textarea>
+                <span class="form-hint">Необязательное поле.</span>
             </div>
 
             <div class="form-actions">

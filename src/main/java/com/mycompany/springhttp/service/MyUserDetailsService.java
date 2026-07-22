@@ -43,7 +43,7 @@ public class MyUserDetailsService implements UserDetailsService{
         
         return User.builder()
             .username(username)
-            .password(passwordEncoder.encode(password))
+            .password(password)
             .roles(rolesArray)
             .build();
     }

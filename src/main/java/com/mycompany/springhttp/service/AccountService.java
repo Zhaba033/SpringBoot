@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 
@@ -20,6 +22,8 @@ public class AccountService {
     private final ObjectMapper om;
     private Map<String, AccountDTO> accounts;
     private final File postsJson = new File("files/json/accounts.json");
+    
+    @Autowired private PasswordEncoder passwordEncoder;
     
     // CONSTRUCTOR
     public AccountService(ObjectMapper objectMapper) {
@@ -52,12 +56,13 @@ public class AccountService {
         return accounts;
     }
     
-    public List<String> getUserRoles(String nickname) {
-        return accounts.get(nickname).getRoles();
+    public List<String> getUserRoles(String username) {
+        return accounts.get(username).getRoles();
     }
     
     public void createNewAccount(String username, AccountDTO account) {
         account.setCreatedTime(LocalDateTime.now());
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.getRoles().add("USER");
         accounts.put(username, account);
         writeJson();
@@ -65,5 +70,10 @@ public class AccountService {
     
     public AccountDTO getUserByName(String name) {
         return accounts.get(name);
+    }
+    
+    public void changePassword(String name, String password) {
+        accounts.get(name).setPassword(passwordEncoder.encode(password));
+        writeJson();
     }
 }

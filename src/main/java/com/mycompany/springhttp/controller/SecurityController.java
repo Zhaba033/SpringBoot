@@ -2,6 +2,7 @@ package com.mycompany.springhttp.controller;
 
 import com.mycompany.springhttp.dto.AccountDTO;
 import com.mycompany.springhttp.service.AccountService;
+import com.mycompany.springhttp.service.PageService;
 import java.time.format.DateTimeFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class SecurityController {
 
     @Autowired
     private AccountService servA;
+    @Autowired
+    private PageService servG;
 
     // LOGOUT
     @GetMapping("/logout_confirm")
@@ -78,12 +81,15 @@ public class SecurityController {
     }
 
     // PROFILE
-    @GetMapping("/profile")
+    @GetMapping("/account/profile")
     public String profilePage(Model model) {
+        model.addAttribute("breadcrumbs", servG.getPages("profile", ""));
+        
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         AccountDTO user = servA.getUserByName(auth.getName());
         model.addAttribute("roles", user.getRoles());
-        
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         String date = user.getCreatedTime().format(formatter);
 
@@ -91,6 +97,43 @@ public class SecurityController {
         model.addAttribute("registration_date", date);
 
         return "profile";
+    }
+
+    // CHANGE PASSWORD
+    @GetMapping("/account/change-password")
+    public String changePasswordPage(
+            Model model,
+            @ModelAttribute(name = "error") String error
+    ) {
+        
+        model.addAttribute("breadcrumbs", servG.getPages("change-password", ""));
+        
+        if (error.equals("diff")) {
+            model.addAttribute("error", "true");
+        }
+        
+        return "change-password";
+
+    }
+    
+    @PostMapping("/account/change-password/confirm")
+    public String changePassword(
+            @RequestParam(name = "password") String password,
+            @RequestParam(name = "password_repeat") String password_repeat,
+            RedirectAttributes redirectAttributes) {
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (!password.equals(password_repeat)) {
+            redirectAttributes.addFlashAttribute("error", "diff");
+            return "redirect:/account/change-password";
+        } else {
+            servA.changePassword(auth.getName(), password);
+            redirectAttributes.addFlashAttribute("code", "200");
+            redirectAttributes.addFlashAttribute("text", "Пароль от аккаунта " + auth.getName() + " успешно изменён.");
+            return "redirect:/result";
+        }
+        
     }
 
 }

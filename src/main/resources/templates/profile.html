@@ -7,14 +7,18 @@
 
     <header th:insert="fragments.html :: header"></header>
 
-    <section class="hero">
-        <div class="container">
-            <h2>Профиль</h2>
-            <p>Информация о вашем аккаунте на форуме</p>
-        </div>
-    </section>
 
-    <div class="container">
+    <div class="site-wrapper">
+        <div th:insert="fragments.html :: breadcrumbs(list=${breadcrumbs})"></div>
+
+        <section class="hero">
+            <div class="container">
+                <h2>Профиль</h2>
+                <p>Информация о вашем аккаунте на форуме</p>
+            </div>
+        </section>
+
+
         <section class="profile-card">
             <div class="profile-card__avatar" aria-hidden="true">
                 <i class="fas fa-user"></i>
@@ -33,6 +37,10 @@
                     <dd>
                         <span th:insert="fragments.html :: your_roles"></span>
                     </dd>
+                </div>
+                <div class="profile-card__row">
+                    <dt>Личные данные</dt>
+                    <dd>Пароль: <a class="link" href="/account/change-password">Изменить пароль</a></dd>
                 </div>
             </dl>
         </section>

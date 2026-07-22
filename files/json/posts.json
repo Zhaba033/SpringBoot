@@ -1,12 +1,12 @@
 {
   "2" : {
-    "author" : "DELETED_ACCOUNT",
+    "author" : "igor",
     "category" : "offtop",
     "title" : "Поделитесь своими успехами",
     "body" : "Расскажите, чего вы добились за весь свой опыт программирования!",
     "code" : "",
     "id" : "2",
-    "timeFromNow" : "3 часа назад",
+    "timeFromNow" : "2 дня назад",
     "createdDate" : "2026-07-20T15:42:28.4375281",
     "comments" : {
       "1" : {
@@ -14,7 +14,7 @@
         "comment" : "asd",
         "id" : "1",
         "userRoles" : [ "USER" ],
-        "timeFromNow" : "57 минут назад",
+        "timeFromNow" : "2 дня назад",
         "createdTime" : "2026-07-20T15:53:19.8260116"
       },
       "2" : {
@@ -22,7 +22,7 @@
         "comment" : "Я в твои годы уже таких сайтов 20 сделал, работай больше\r\n",
         "id" : "2",
         "userRoles" : [ "BANNED" ],
-        "timeFromNow" : "42 минуты назад",
+        "timeFromNow" : "2 дня назад",
         "createdTime" : "2026-07-20T16:08:41.762486"
       },
       "3" : {
@@ -30,7 +30,7 @@
         "comment" : "Ты красавчик, я забанил этого типа, надо уважать труд других",
         "id" : "3",
         "userRoles" : [ "USER", "MODERATOR" ],
-        "timeFromNow" : "",
+        "timeFromNow" : "2 дня назад",
         "createdTime" : "2026-07-20T16:51:30.1494257"
       }
     }
@@ -42,28 +42,160 @@
     "body" : "Я не понимаю принципы ООП",
     "code" : "",
     "id" : "3",
-    "timeFromNow" : "2 часа назад",
+    "timeFromNow" : "2 дня назад",
     "createdDate" : "2026-07-20T16:29:45.8924409",
     "comments" : { }
   },
-  "4" : {
+  "5" : {
     "author" : "igor",
     "category" : "offtop",
-    "title" : "1",
-    "body" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "title" : "Изменения сайта за сегодня",
+    "body" : "- Убрана возможность создавать категории\r\n- Добавлены \"breadcrumbs\"\r\n- Добавлено шифрование паролей\r\n- Улучшено качество оформления сайта\r\n",
     "code" : "",
-    "id" : "4",
-    "timeFromNow" : "2 часа назад",
-    "createdDate" : "2026-07-20T16:43:47.4844574",
+    "id" : "5",
+    "timeFromNow" : "21 час назад",
+    "createdDate" : "2026-07-21T17:27:46.3062367",
+    "comments" : { }
+  },
+  "6" : {
+    "author" : "igor",
+    "category" : "java",
+    "title" : "Проверьте мой код",
+    "body" : "Вот как я сделал эту страницу /post, норм или что-то надо изменить?",
+    "code" : "@GetMapping(\"/post/{c}\")\r\npublic String PostPage(@PathVariable String c,\r\n    Model model) {\r\n\r\n    if (!servP.getPosts().keySet().contains(c)) {\r\n        return \"404\";\r\n    }\r\n\r\n    model.addAttribute(\"breadcrumbs\", servG.getPages(c, \"post\"));\r\n\r\n    PostDTO post = servP.getPost(c);\r\n\r\n    //date\r\n    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(\"dd.MM.yyyy HH:mm\");\r\n    String formatted = post.getCreatedDate().format(formatter);\r\n\r\n    model.addAttribute(\"post\", post);\r\n    model.addAttribute(\"id\", c);\r\n    model.addAttribute(\"comments\", servP.get_coms(c, servA));\r\n    model.addAttribute(\"date\", formatted);\r\n\r\n    return \"post\";\r\n\r\n}",
+    "id" : "6",
+    "timeFromNow" : "4 часа назад",
+    "createdDate" : "2026-07-22T10:09:40.9300706",
     "comments" : {
       "1" : {
-        "author" : "admin",
-        "comment" : "k",
+        "author" : "user",
+        "comment" : "Да вроде всё так, только я бы страницу 404 сделал бы через реальную ошибку, а не просто отображение страницы",
         "id" : "1",
-        "userRoles" : [ "USER", "MODERATOR" ],
-        "timeFromNow" : "",
-        "createdTime" : "2026-07-20T17:59:28.8041213"
+        "userRoles" : [ "USER" ],
+        "timeFromNow" : "4 часа назад",
+        "createdTime" : "2026-07-22T10:12:52.5693839"
       }
     }
+  },
+  "7" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "7",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:51.9621432",
+    "comments" : { }
+  },
+  "8" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "8",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:54.0188423",
+    "comments" : { }
+  },
+  "9" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "9",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:55.2751659",
+    "comments" : { }
+  },
+  "10" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "10",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:55.8765783",
+    "comments" : { }
+  },
+  "11" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "11",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:56.4274087",
+    "comments" : { }
+  },
+  "12" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "12",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:57.0253605",
+    "comments" : { }
+  },
+  "13" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "13",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:57.6017198",
+    "comments" : { }
+  },
+  "14" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "14",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:58.22292",
+    "comments" : { }
+  },
+  "15" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "15",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:58.767376",
+    "comments" : { }
+  },
+  "16" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "16",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:59.3163606",
+    "comments" : { }
+  },
+  "17" : {
+    "author" : "admin",
+    "category" : "offtop",
+    "title" : "1",
+    "body" : "1",
+    "code" : "",
+    "id" : "17",
+    "timeFromNow" : "",
+    "createdDate" : "2026-07-22T14:01:59.8283541",
+    "comments" : { }
   }
 }

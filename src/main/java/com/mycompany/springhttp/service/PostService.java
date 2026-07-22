@@ -19,6 +19,7 @@ import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ocpsoft.prettytime.PrettyTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -31,6 +32,9 @@ public class PostService {
     private Map<String, PostDTO> posts;
     private final File postsJson = new File("files/json/posts.json");
     private final PrettyTime prettyTime = new PrettyTime(new Date());
+    
+    @Autowired
+    private AccountService servA;
     
     // PRIVATE METHODS ------------------
     private void writeJson() {
@@ -55,20 +59,25 @@ public class PostService {
         }
     }
     
-        
+    
+    // Обновляет всю информацию сразу! Не оптимизировано!
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
     private void updatePostsData() {
         for (Map.Entry<String, PostDTO> entry : posts.entrySet()) {
             entry.getValue().setTimeFromNow(prettyTime.format(Date.from(entry.getValue().getCreatedDate().atZone(ZoneId.systemDefault()).toInstant())));
+            updateCommsData(entry.getValue().getId());
         }
     }
     
-    private void updateCommsData(String postId, AccountService as) { // обновляет информацию в комментариях: роли пользователя, время с публикации
+    private void updateCommsData(String postId) { // обновляет информацию в комментариях: роли пользователя, время с публикации
         PostDTO post = posts.get(postId);
         for (Map.Entry<String, CommentDTO> entry : post.getComments().entrySet()) {
             entry.getValue().setTimeFromNow(prettyTime.format(Date.from(entry.getValue().getCreatedTime().atZone(ZoneId.systemDefault()).toInstant())));
-            entry.getValue().setUserRoles(as.getUserRoles(entry.getValue().getAuthor()));
+            entry.getValue().setUserRoles(servA.getUserRoles(entry.getValue().getAuthor()));
         }
     }
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
     
     // CONSTRUCTOR ------------------
     public PostService(ObjectMapper objectMapper) {
@@ -77,8 +86,12 @@ public class PostService {
     }
     
     // PUBLIC METHODS ------------------
-    public Map<String, PostDTO> getMap() {
+    public Map<String, PostDTO> getPosts() {
         return posts;
+    }
+    
+    public PostDTO getPost(String id) {
+        return posts.get(id);
     }
     
     public Map<String, PostDTO> getPostsById(List<String> ids) {
@@ -118,8 +131,8 @@ public class PostService {
         writeJson();
     }
     
-    public List<CommentDTO> get_coms(String i, AccountService as) {
-        updateCommsData(i, as);
+    public List<CommentDTO> get_coms(String i) {
+        updateCommsData(i);
         List<CommentDTO> coms = new ArrayList(posts.get(i).getComments().values());
         Collections.reverse(coms);
         return coms;

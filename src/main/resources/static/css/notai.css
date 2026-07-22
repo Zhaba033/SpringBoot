@@ -1,0 +1,45 @@
+.site-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    padding-bottom: 40px;
+    padding-top: 14px;
+}
+
+.link {
+    color: #000000;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+select {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    font-size: smaller;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background-color: #ffffff;
+    padding: 2px 2px;
+    margin: 0 4px 0 4px;
+}
+
+select:focus {
+    outline: none;
+}
+
+.error {
+    color:red;
+    font-size: smaller;
+}
+
+.textar {
+  resize: none; 
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: 50px;
+  width: 100%;
+}

@@ -4,6 +4,7 @@ import com.mycompany.springhttp.dto.CategoryDTO;
 import com.mycompany.springhttp.dto.PostDTO;
 import com.mycompany.springhttp.service.AccountService;
 import com.mycompany.springhttp.service.CategoryService;
+import com.mycompany.springhttp.service.PageService;
 import com.mycompany.springhttp.service.PostService;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,16 +28,19 @@ public class CustomController {
     @Autowired private PostService servP;
     @Autowired private CategoryService servC;
     @Autowired private AccountService servA;
+    @Autowired private PageService servG;
 
     // CATEGORIES
     @GetMapping("/categories/{c}")
     public String CategoryPage(@PathVariable String c,
             Model model) {
-        if (!servC.getCats().keySet().contains(c)) {
+        if (!servC.getCategories().keySet().contains(c)) {
             return "404";
         }
+        
+        model.addAttribute("breadcrumbs", servG.getPages(c, "cat"));
 
-        CategoryDTO cat = servC.getCats().get(c);
+        CategoryDTO cat = servC.getCategory(c);
 
         // define posts map
         if (cat.getPosts() != null) {
@@ -57,11 +61,14 @@ public class CustomController {
     @GetMapping("/post/{c}")
     public String PostPage(@PathVariable String c,
         Model model) {
-        
-        if (!servP.getMap().keySet().contains(c)) {
+
+        if (!servP.getPosts().keySet().contains(c)) {
             return "404";
         }
-        PostDTO post = servP.getMap().get(c);
+
+        model.addAttribute("breadcrumbs", servG.getPages(c, "post"));
+
+        PostDTO post = servP.getPost(c);
 
         //date
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -69,7 +76,7 @@ public class CustomController {
 
         model.addAttribute("post", post);
         model.addAttribute("id", c);
-        model.addAttribute("comments", servP.get_coms(c, servA));
+        model.addAttribute("comments", servP.get_coms(c));
         model.addAttribute("date", formatted);
 
         return "post";
@@ -96,7 +103,7 @@ public class CustomController {
 
     @PostMapping(value={"/moderator/post/{id}/delete", "/moderator/post/{id}/delete/{from}"})
     public String removePost(@PathVariable String id, @PathVariable Optional<String> from) {
-        String postCategory = servP.getMap().get(id).getCategory();
+        String postCategory = servP.getPost(id).getCategory();
         servP.removePost(id);
         servC.removePostFromCat(postCategory, id);
         log.info(from.get());

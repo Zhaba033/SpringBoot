@@ -7,6 +7,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class CategoryDTO {
+    String id;
     String name;
     String description;
     List<String> posts;

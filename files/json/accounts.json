@@ -1,26 +1,26 @@
 {
+  "user" : {
+    "username" : "user",
+    "password" : "$2a$10$vc/uKEIVa2u97yTKXEwvoe3Ige5zDIq1CFoMNCFzfQEMpTnd1fd06",
+    "roles" : [ "USER" ],
+    "createdTime" : "2026-07-21T11:17:54.9589719"
+  },
   "igor" : {
     "username" : "igor",
-    "password" : "123",
+    "password" : "$2a$10$tM6x1N8PjH8sB64POhExzucoccBommTiFWUn5KK.EUB9PjsrZ0olG",
     "roles" : [ "USER" ],
-    "createdTime" : "2026-07-19T11:30:13.519195"
+    "createdTime" : "2026-07-21T11:24:26.8089587"
   },
   "admin" : {
     "username" : "admin",
-    "password" : "123",
+    "password" : "$2a$10$uPVQDl06ESK5lFIyEAs8AuQqFRXvGwLeMoSyWyhq.nLWGSUEMM7YS",
     "roles" : [ "USER", "MODERATOR" ],
-    "createdTime" : "2026-07-19T12:01:52.6453052"
-  },
-  "baduser" : {
-    "username" : "baduser",
-    "password" : "123",
-    "roles" : [ "BANNED" ],
-    "createdTime" : "2026-07-20T11:39:12.2058514"
+    "createdTime" : "2026-07-21T11:25:03.6128951"
   },
   "testuser" : {
     "username" : "testuser",
-    "password" : "123",
+    "password" : "$2a$10$BLrl2odK.br.iV5Nuey3A.r5PftkJslwJP.WMDl43jJsEm8J7aTDK",
     "roles" : [ "BANNED" ],
-    "createdTime" : "2026-07-20T16:07:56.92205"
+    "createdTime" : "2026-07-21T16:55:46.1740855"
   }
 }

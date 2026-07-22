@@ -7,44 +7,27 @@
 
     <header th:insert="fragments.html :: header"></header>
 
-    <section class="hero">
-        <div class="container">
-            <h2>Результат действия</h2>
-            <p>Универсальная страница для отображения итога операции</p>
-        </div>
-    </section>
 
     <div class="container">
         <div class="result-page">
 
-            <section class="result-card result-card--success">
+            <section th:if="${code}=='200'" class="result-card result-card--success">
                 <span class="result-card__icon" aria-hidden="true"><i class="fas fa-check-circle"></i></span>
-                <h1 class="result-card__title">Действие выполнено успешно</h1>
-                <p class="result-card__text">Операция завершена без ошибок. Все изменения сохранены и уже доступны на сайте.</p>
-                <div class="result-card__actions">
-                    <a href="/" class="result-card__btn result-card__btn--primary">На главную</a>
-                    <a href="/post/1842" class="result-card__btn">Перейти к результату действия</a>
-                </div>
+                <h1 class="result-card__title">Успешно!</h1>
+                <p th:text="${text}" class="result-card__text"></p>
             </section>
 
-            <section class="result-card result-card--changed">
+            <section th:if="${code}=='300'" class="result-card result-card--changed">
                 <span class="result-card__icon" aria-hidden="true"><i class="fas fa-pen-square"></i></span>
                 <h1 class="result-card__title">Действие выполнено с изменениями</h1>
                 <p class="result-card__text">Операция завершена, но часть данных была изменена или дополнена. Проверьте результат перед продолжением работы.</p>
-                <div class="result-card__actions">
-                    <a href="/" class="result-card__btn result-card__btn--primary">На главную</a>
-                    <a href="/categories/test" class="result-card__btn">Перейти к результату действия</a>
-                </div>
+
             </section>
 
-            <section class="result-card result-card--error">
+            <section th:if="${code}=='400'" class="result-card result-card--error">
                 <span class="result-card__icon" aria-hidden="true"><i class="fas fa-times-circle"></i></span>
-                <h1 class="result-card__title">Ошибка при выполнении действия</h1>
+                <h1 class="result-card__title">Ошибка.</h1>
                 <p class="result-card__text">Не удалось завершить операцию. Попробуйте ещё раз или вернитесь на главную страницу.</p>
-                <div class="result-card__actions">
-                    <a href="/" class="result-card__btn result-card__btn--primary">На главную</a>
-                    <a href="/post" class="result-card__btn">Перейти к результату действия</a>
-                </div>
             </section>
 
         </div>

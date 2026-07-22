@@ -1,5 +1,6 @@
 package com.mycompany.springhttp.config;
 
+import com.mycompany.springhttp.filter.CustomFilter;
 import com.mycompany.springhttp.service.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -17,6 +19,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.addFilterAfter(
+                new CustomFilter(), BasicAuthenticationFilter.class);
         http
                 .authorizeRequests(auth -> auth
                 /*.antMatchers("/css/**")
@@ -33,7 +37,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                 .loginPage("/auth/login")
                 .loginProcessingUrl("/auth/perform_login")
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/", false)
                 .failureUrl("/auth/login?error=true")
                 .permitAll()
                 )

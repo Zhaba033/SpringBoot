@@ -7,7 +7,14 @@
     <title th:text="${title}">Title</title>
 
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css}">
+
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/notai.css}">
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+
+    <link rel="stylesheet" th:href="@{/js/highlight/styles/default.css}">
+    <script type="text/javascript" th:src="@{/js/highlight/highlight.js}"></script>
+    <script>hljs.highlightAll();</script>
 
 </head>
 
@@ -21,14 +28,20 @@
                 </a>
             </div>
             <div class="nav-links">
+                <a href="/create-post">Опубликовать</a>
                 <a href="/categories">Категории</a>
+                <a href="/">Главная</a>
                 <div class="account-dropdown">
                     <button type="button" class="account-dropdown__toggle" aria-haspopup="true" aria-expanded="false">
-                        Аккаунт <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                        <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
+                        <span sec:authorize="!isAuthenticated()">Аккаунт</span>
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </button>
                     <div class="account-dropdown__menu" role="menu">
                         <div sec:authorize="isAuthenticated()">
-                            <a href="/profile" class="account-dropdown__item" role="menuitem">Профиль</a>
+                            <a href="/account/profile" class="account-dropdown__item" role="menuitem">Профиль</a>
+                            <a sec:authorize="hasRole('ROLE_MODERATOR')" href="/moderator/panel"
+                                class="account-dropdown__item" role="menuitem">Панель модератора</a>
                             <a href="/logout_confirm" style="color: rgb(218, 18, 18);" class="account-dropdown__item"
                                 role="menuitem">Выйти</a>
                         </div>
@@ -42,6 +55,15 @@
             </div>
         </div>
     </header>
+
+    <div th:fragment="breadcrumbs (list)" style="margin-bottom: 10px;">
+        <span th:each="page, iterStat : ${list}">
+            <span th:if="${!iterStat.first}"> -> </span>
+            <a th:if="${!iterStat.last}" style="font-size: smaller;" class="link" th:href="${page.path}"
+                th:text="${page.name}"></a>
+            <span th:if="${iterStat.last}" style="font-size: smaller;" th:text="${page.name}"></span>
+        </span>
+    </div>
 
     <div th:fragment="banned (text)" sec:authorize="hasRole('ROLE_BANNED')" class="banned-banner">
         <div class="banned-banner__icon">
@@ -85,10 +107,45 @@
     <form th:fragment="delete (path)" sec:authorize="hasRole('ROLE_MODERATOR')" class="mod-delete" method="post"
         th:action="${path}">
         <input type="hidden" name="id" value="1842">
-        <button type="submit" class="mod-delete__btn" title="Удалить пост" aria-label="Удалить пост">
+        <button type="submit" class="mod-delete__btn" title="Удалить" aria-label="Удалить">
             <i class="fas fa-trash-alt"></i>
         </button>
     </form>
+
+
+
+    <!--  PAGES COUNTER  -->
+    <div style="justify-content: center; display: flex;" th:fragment="page-counter (maxOnPageGiven, objectsGiven)">
+
+        <form method="get" th:action="@{''}" th:with="
+        maxOnPage=${T(java.lang.Integer).parseInt(maxOnPageGiven)},
+        objects=${T(java.lang.Integer).parseInt(objectsGiven)},
+        maxPages=(${#numbers.formatDecimal(T(java.lang.Math).ceil( (objects/1.0) / maxOnPage ), 1, 0)})">
+            <button name="page" th:class="${page==1} ? 'page-btn--active page-btn' : page-btn" th:if="${maxPages}>1"
+                value="1">1</button>
+            <span th:if="${page}>=4 and ${maxPages}>5">...</span>
+
+            <span
+                th:with="dynamicPage = ${maxPages}>4 ? ((${page}>2 and (${maxPages}-${page})>2) ? ${page}-1 : ((${page}<=2) ? 2 : (${maxPages}-3))) : 2">
+                <button name="page" th:class="${page}==${dynamicPage} ? 'page-btn--active page-btn' : page-btn"
+                    th:if="${maxPages}>1" th:text="${dynamicPage}" th:value="${dynamicPage}">2</button>
+                <button name="page" th:class="${page}==${dynamicPage+1} ? 'page-btn--active page-btn' : page-btn"
+                    th:if="${maxPages}>2" th:text="${dynamicPage}+1" th:value="${dynamicPage}+1">3</button>
+                <button name="page" th:class="${page}==${dynamicPage+2} ? 'page-btn--active page-btn' : page-btn"
+                    th:if="${maxPages}>3" th:text="${dynamicPage}+2" th:value="${dynamicPage}+2">4</button>
+            </span>
+            <span th:if="${maxPages}-${page}>=3 and ${maxPages}>5">...</span>
+            <button name="page" th:class="${page}==${maxPages} ? 'page-btn--active page-btn' : page-btn"
+                th:if="${maxPages}>4" th:value="${maxPages}" th:text="${maxPages}">5</button>
+
+            <!-- DEBUG 
+            <p
+                th:text="|Page: ${page}, maxPages: ${maxPages}, maxOnPage: ${maxOnPage}, objects: ${objects}, dynamicPage: ${dynamicPage}, ${objects/maxOnPage}|">
+            </p> -->
+
+        </form>
+    </div>
+
 
 
 

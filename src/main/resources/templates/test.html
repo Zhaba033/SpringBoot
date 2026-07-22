@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head th:replace="fragments.html :: head(title='Результат действия')"></head>
+
+<body>
+
+    <header th:insert="fragments.html :: header"></header>
+
+    <div class="site-wrapper">
+        <header th:insert="fragments.html :: page-counter(maxOnPageGiven='3', objectsGiven='53')"></header>
+    </div>
+
+    <footer th:insert="fragments.html :: footer"></footer>
+
+</body>
+
+</html>

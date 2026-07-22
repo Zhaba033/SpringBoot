@@ -6,39 +6,48 @@
 <body>
 
     <header th:insert="fragments.html :: header"></header>
+    <div class="site-wrapper">
 
-    <section class="hero">
-        <div class="container">
+        <div th:insert="fragments.html :: breadcrumbs(list=${breadcrumbs})"></div>
+
+        <section>
             <h2>Категории форума</h2>
-            <p>Выберите интересующий вас раздел</p>
+        </section>
+
+        <div style="margin: 10px 0 10px 0;">
+            <form id="f" th:action="@{''}" method="GET">
+                <span>Сортировка: </span>
+                <select name="filter" onchange="document.getElementById('f').submit()">
+                    <option th:selected="${filter=='newest'}" value="newest">Сначала новые</option>
+                    <option th:selected="${filter=='oldest'}" value="oldest">Сначала старые</option>
+                    <option th:selected="${filter=='actual'}" value="actual">По популярности</option>
+                </select>
+            </form>
         </div>
-    </section>
 
-    <div class="container">
-        <div class="categories-page">
-            <div th:if="${#maps.size(categories)==0}" class="categories-empty-notice">
-                <p class="empty-notice-title">Категорий пока нет</p>
-                <a href="\new-category" class="create-category-btn">Создать категорию</a>
-            </div>
-            <div th:if="${#maps.size(categories)!=0}" th:each="category : ${categories}" class="moderable-item">
-                <a th:href="@{'/categories/'+${category.key}}" href="/categories/test" class="category-item">
-                    <div class="category-content">
-                        <h3 th:text="${category.value.name}">Название</h3>
-                        <p th:text="${category.value.description}">Описание</p>
-                        <div class="category-meta">
-                            <span class="posts"><i class="far fa-comment-dots"></i>Публикаций:
-                                <span
-                                    th:text="${category.value.posts != null ? #lists.size(category.value.posts) : 0}">0</span>
-                            </span>
+        <div class="homepage-block">
+            <ul class="publication-list">
+                <div th:each="category : ${categories}" class="moderable-item">
+                    <a th:href="@{'/categories/'+${category.id}}" href="/categories/test" class="category-item">
+                        <div class="category-content">
+                            <h3 th:text="${category.name}">Название</h3>
+                            <p th:text="${category.description}">Описание</p>
+                            <div class="category-meta">
+                                <span class="posts"><i class="far fa-comment-dots"></i>Публикаций:
+                                    <span
+                                        th:text="${category.posts != null ? #lists.size(category.posts) : 0}">0</span>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
 
-                <form th:replace="fragments.html :: delete(path=@{/moderator/categories/} + ${category.key} + @{/delete})"></form>
-            </div>
+                    <form
+                        th:replace="fragments.html :: delete(path=@{/moderator/categories/} + ${category.id} + @{/delete})">
+                    </form>
+                </div>
+            </ul>
         </div>
     </div>
-
     <footer th:insert="fragments.html :: footer"></footer>
 
 </body>
