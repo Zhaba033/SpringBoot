@@ -8,22 +8,23 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class PageService {
 
-    @Autowired
-    private PostService servP;
-    @Autowired
-    private CategoryService servC;
+    private final PostService postService;
+    private final CategoryService categoryService;
 
     Map<String, PageDTO> pages = new HashMap();
 
     // PRIVATE
+    @PostConstruct
     private void initPages() {
         pages.put("home", new PageDTO("Главная", "/", null));
         pages.put("categories", new PageDTO("Категории", "/categories", "home"));
@@ -32,24 +33,19 @@ public class PageService {
     }
     
     private void addCategory(String catName) {
-        CategoryDTO cat = servC.getCategory(catName);
+        CategoryDTO cat = categoryService.getCategory(catName);
         if (!pages.containsKey(cat.getId())) {
             pages.put(cat.getId(), new PageDTO(cat.getName(), "/categories/" + catName, "categories"));
         }
     }
     
     private void addPost(String postId) {
-        PostDTO post = servP.getPost(postId);
+        PostDTO post = postService.getPost(postId);
         if (!pages.containsKey(post.getId())) {
-            CategoryDTO postCat = servC.getCategory(post.getCategory());
+            CategoryDTO postCat = categoryService.getCategory(post.getCategory());
             addCategory(postCat.getId());
             pages.put(post.getId(), new PageDTO(post.getTitle(), "/categories/" + postCat.getName() + "/" + post.getId(), postCat.getId()));
         }
-    }
-
-    // CONSTRUCTOR
-    public PageService() {
-        initPages();
     }
 
     // PUBLIC

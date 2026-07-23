@@ -9,41 +9,45 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class AccountService {
     
-    private final ObjectMapper om;
     private Map<String, AccountDTO> accounts;
     private final File postsJson = new File("files/json/accounts.json");
     
-    @Autowired private PasswordEncoder passwordEncoder;
+    private final ObjectMapper objectMapper;
+    private final PasswordEncoder passwordEncoder;
     
-    // CONSTRUCTOR
-    public AccountService(ObjectMapper objectMapper) {
+/*    // CONSTRUCTOR
+    public AccountService(ObjectMapper objectMapper, PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
         om = objectMapper;
         initJson();
-    }
+    }*/
     
     // PRIVATE METHODS
     private void writeJson() {
         try {
-            om.writerWithDefaultPrettyPrinter()
+            objectMapper.writerWithDefaultPrettyPrinter()
                     .writeValue(postsJson, accounts);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
     
+    @PostConstruct
     private void initJson() {
         try {
-            accounts = om.readValue(postsJson, new TypeReference<Map<String, AccountDTO>>() {});
+            accounts = objectMapper.readValue(postsJson, new TypeReference<Map<String, AccountDTO>>() {});
             //log.info(accounts.toString());
         } catch (IOException e) {
             accounts = new HashMap();

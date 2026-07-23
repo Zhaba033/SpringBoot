@@ -6,6 +6,7 @@ import com.mycompany.springhttp.service.CategoryService;
 import com.mycompany.springhttp.service.PageService;
 import com.mycompany.springhttp.service.PostService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,31 +16,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller
 @Slf4j
+@Controller
+@RequiredArgsConstructor
 public class MainController {
 
-    @Autowired
-    private PostService servP;
-    @Autowired
-    private CategoryService servC;
-    @Autowired
-    private PageService servG;
-
-    @GetMapping("/test")
-    public String TestPage(Model model) {
-        return "test";
-    }
+    private final PostService postService;
+    private final CategoryService categoryService;
+    private final PageService pageService;
     
     // HOME
     @GetMapping("/")
     public String HomePage(Model model) {
-        model.addAttribute("breadcrumbs", servG.getPages("home", ""));
+        model.addAttribute("breadcrumbs", pageService.getPages("home", ""));
         
-        List<PostDTO> recentPosts = servP.getRecentPosts(3);
+        List<PostDTO> recentPosts = postService.getRecentPosts(3);
         model.addAttribute("posts", recentPosts);
 
-        List<CategoryDTO> topCategories = servC.getTopCategories(3);
+        List<CategoryDTO> topCategories = categoryService.getTopCategories(3);
         model.addAttribute("categories", topCategories);
 
         return "home";
@@ -53,13 +47,13 @@ public class MainController {
             @ModelAttribute(name = "category") String category
     ) {
         model.addAttribute("category", category);
-        model.addAttribute("cats", servC.catsIdName());
+        model.addAttribute("cats", categoryService.catsIdName());
         return "upload_theme";
     }
 
     @PostMapping("/create-post/upload")
     public String uploadPost(@ModelAttribute PostDTO post) {
-        servC.addPostToCat(post.getCategory(), Integer.toString(servP.add(post)));
+        postService.add(post);
         return "redirect:/post/" + post.getId();
     }
 
@@ -77,12 +71,12 @@ public class MainController {
             Model model) {
 
         // catch "Exceptions" (like id already exists)
-        if (servC.alreadyExists(catId)) {
+        if (categoryService.alreadyExists(catId)) {
             model.addAttribute("alreadyExists", catId);
             return "create_category";
         }
 
-        servC.add(catId, cat);
+        categoryService.add(catId, cat);
         return "redirect:/categories";
     }
     
@@ -96,11 +90,11 @@ public class MainController {
             Model model,
             @ModelAttribute(name = "filter") String filter
     ) {
-        model.addAttribute("breadcrumbs", servG.getPages("categories", ""));
+        model.addAttribute("breadcrumbs", pageService.getPages("categories", ""));
         
         //log.info(servC.getCats().toString());
         model.addAttribute("filter", filter);
-        model.addAttribute("categories", servC.getCatsWithFilter(filter));
+        model.addAttribute("categories", categoryService.getCatsWithFilter(filter));
         return "categories";
     }
 

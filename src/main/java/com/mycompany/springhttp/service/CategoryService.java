@@ -17,20 +17,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class CategoryService {
 
-    private final ObjectMapper om;
+    private final ObjectMapper objectMapper;
     private Map<String, CategoryDTO> cats;
     private File catsJson = new File("files/json/categories.json");
 
     // CONSTRUCTOR
     public CategoryService(ObjectMapper objectMapper) {
-        om = objectMapper;
+        this.objectMapper = objectMapper;
         initJson();
     }
 
     // PRIVATE METHODS
     private void writeJson() {
         try {
-            om.writerWithDefaultPrettyPrinter()
+            objectMapper.writerWithDefaultPrettyPrinter()
                     .writeValue(catsJson, cats);
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -39,7 +39,7 @@ public class CategoryService {
 
     private void initJson() {
         try {
-            cats = om.readValue(catsJson, new TypeReference<Map<String, CategoryDTO>>() {
+            cats = objectMapper.readValue(catsJson, new TypeReference<Map<String, CategoryDTO>>() {
             });
         } catch (IOException e) {
             cats = new HashMap();

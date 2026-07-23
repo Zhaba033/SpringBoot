@@ -4,6 +4,7 @@ import com.mycompany.springhttp.dto.AccountDTO;
 import com.mycompany.springhttp.service.AccountService;
 import com.mycompany.springhttp.service.PageService;
 import java.time.format.DateTimeFormatter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -16,14 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
 @Slf4j
+@Controller
+@RequiredArgsConstructor
 public class SecurityController {
 
-    @Autowired
-    private AccountService servA;
-    @Autowired
-    private PageService servG;
+    private final AccountService accountService;
+    private final PageService pageService;
 
     // LOGOUT
     @GetMapping("/logout_confirm")
@@ -62,7 +62,7 @@ public class SecurityController {
 
         String error = null;
 
-        if (servA.getAccounts().keySet().contains(account.getUsername())) {
+        if (accountService.getAccounts().keySet().contains(account.getUsername())) {
             error = "userAlreadyExists";
         } else if (account.getPassword().length() < 3) {
             error = "tooShortPassw";
@@ -76,18 +76,18 @@ public class SecurityController {
         }
 
         log.info("New account: " + account.toString());
-        servA.createNewAccount(account.getUsername(), account);
+        accountService.createNewAccount(account.getUsername(), account);
         return "redirect:/auth/login";
     }
 
     // PROFILE
     @GetMapping("/account/profile")
     public String profilePage(Model model) {
-        model.addAttribute("breadcrumbs", servG.getPages("profile", ""));
+        model.addAttribute("breadcrumbs", pageService.getPages("profile", ""));
         
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        AccountDTO user = servA.getUserByName(auth.getName());
+        AccountDTO user = accountService.getUserByName(auth.getName());
         model.addAttribute("roles", user.getRoles());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -106,7 +106,7 @@ public class SecurityController {
             @ModelAttribute(name = "error") String error
     ) {
         
-        model.addAttribute("breadcrumbs", servG.getPages("change-password", ""));
+        model.addAttribute("breadcrumbs", pageService.getPages("change-password", ""));
         
         if (error.equals("diff")) {
             model.addAttribute("error", "true");
@@ -128,7 +128,7 @@ public class SecurityController {
             redirectAttributes.addFlashAttribute("error", "diff");
             return "redirect:/account/change-password";
         } else {
-            servA.changePassword(auth.getName(), password);
+            accountService.changePassword(auth.getName(), password);
             redirectAttributes.addFlashAttribute("code", "200");
             redirectAttributes.addFlashAttribute("text", "Пароль от аккаунта " + auth.getName() + " успешно изменён.");
             return "redirect:/result";

@@ -27,12 +27,10 @@ public class SecurityConfig {
                 .permitAll()
                 .antMatchers("/auth/**")
                 .permitAll()*/
-                .antMatchers("/**")
-                .permitAll()
                 .antMatchers("/moderator/**")
                 .hasRole("MODERATOR")
                 .anyRequest()
-                .authenticated()
+                .permitAll()
                 )
                 .formLogin(form -> form
                 .loginPage("/auth/login")
@@ -43,7 +41,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                 .logoutRequestMatcher(
-                        new AntPathRequestMatcher("/logout", "GET") //  .logoutUrl("/logout")
+                        new AntPathRequestMatcher("/logout", "POST") //  .logoutUrl("/logout")
                 )
                 .logoutSuccessUrl("/auth/logout_success")
                 .permitAll()

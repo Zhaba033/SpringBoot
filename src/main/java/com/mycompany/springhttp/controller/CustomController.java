@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,33 +22,35 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller
+
 @Slf4j
+@Controller
+@RequiredArgsConstructor
 public class CustomController {
 
-    @Autowired private PostService servP;
-    @Autowired private CategoryService servC;
-    @Autowired private AccountService servA;
-    @Autowired private PageService servG;
+    private final PostService postService;
+    private final CategoryService categoryService;
+    private final AccountService accountService;
+    private final PageService pageService;
 
     // CATEGORIES
     @GetMapping("/categories/{c}")
     public String CategoryPage(@PathVariable String c,
             Model model) {
-        if (!servC.getCategories().keySet().contains(c)) {
+        if (!categoryService.getCategories().keySet().contains(c)) {
             return "404";
         }
         
-        model.addAttribute("breadcrumbs", servG.getPages(c, "cat"));
+        model.addAttribute("breadcrumbs", pageService.getPages(c, "cat"));
 
-        CategoryDTO cat = servC.getCategory(c);
+        CategoryDTO cat = categoryService.getCategory(c);
 
         // define posts map
         if (cat.getPosts() != null) {
 
             List<String> postIds = new ArrayList<>(cat.getPosts());
             Collections.reverse(postIds);
-            Map<String, PostDTO> posts = servP.getPostsById(postIds);
+            Map<String, PostDTO> posts = postService.getPostsById(postIds);
             model.addAttribute("posts", posts);
         }
 
@@ -62,13 +65,13 @@ public class CustomController {
     public String PostPage(@PathVariable String c,
         Model model) {
 
-        if (!servP.getPosts().keySet().contains(c)) {
+        if (!postService.getPosts().keySet().contains(c)) {
             return "404";
         }
 
-        model.addAttribute("breadcrumbs", servG.getPages(c, "post"));
+        model.addAttribute("breadcrumbs", pageService.getPages(c, "post"));
 
-        PostDTO post = servP.getPost(c);
+        PostDTO post = postService.getPost(c);
 
         //date
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -76,7 +79,7 @@ public class CustomController {
 
         model.addAttribute("post", post);
         model.addAttribute("id", c);
-        model.addAttribute("comments", servP.get_coms(c));
+        model.addAttribute("comments", postService.get_coms(c));
         model.addAttribute("date", formatted);
 
         return "post";
@@ -88,7 +91,7 @@ public class CustomController {
             @RequestParam(name = "username") String username,
             @RequestParam(name = "comment") String comment) {
 
-        servP.add_comment(c, username, comment, servA.getUserByName(username).getRoles());
+        postService.add_comment(c, username, comment, accountService.getUserByName(username).getRoles());
 
         return "redirect:/post/" + c;
 
@@ -97,15 +100,15 @@ public class CustomController {
     // MODERATION
     @PostMapping("/moderator/categories/{c}/delete")
     public String removeCategory(@PathVariable String c) {
-        servC.removeCat(c);
+        categoryService.removeCat(c);
         return "redirect:/categories";
     }
 
     @PostMapping(value={"/moderator/post/{id}/delete", "/moderator/post/{id}/delete/{from}"})
     public String removePost(@PathVariable String id, @PathVariable Optional<String> from) {
-        String postCategory = servP.getPost(id).getCategory();
-        servP.removePost(id);
-        servC.removePostFromCat(postCategory, id);
+        String postCategory = postService.getPost(id).getCategory();
+        postService.removePost(id);
+        categoryService.removePostFromCat(postCategory, id);
         log.info(from.get());
         if (from.isPresent() && from.get().equals("home")) {
             return "redirect:/";
@@ -115,7 +118,7 @@ public class CustomController {
 
     @PostMapping("/moderator/post/{postId}/comment/{commId}/delete")
     public String removeComm(@PathVariable String postId, @PathVariable String commId) {
-        servP.removeComm(postId, commId);
+        postService.removeComm(postId, commId);
         return "redirect:/post/" + postId;
     }
 }
