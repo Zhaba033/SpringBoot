@@ -42,7 +42,7 @@ public class CategoryController {
         Category cat = categoryRepository.findByUid(c);
 
         
-        model.addAttribute("posts", postRepository.findByCategoryOrderByCreatedTimeDesc(cat.getUid()));
+        model.addAttribute("posts", postRepository.findByCategoryOrderByCreatedTimeDesc(cat));
         model.addAttribute("category", cat);
 
         return "category/category_page";

@@ -66,8 +66,6 @@ public class PostController {
     @PostMapping("/post/{c}")
     public String PostPageComment(@PathVariable Long c, @ModelAttribute Comment comment) {
         
-        comment.setUserRoles(accountRepository.findByCommentsId(comment.getId()).getRoles());
-        
         commentRepository.save(comment);
 
         return "redirect:/post/" + c;

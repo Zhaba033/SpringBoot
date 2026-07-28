@@ -44,7 +44,7 @@ public class PageService {
     private void addPost(String postTitle) {
         Post post = postRepository.findByTitle(postTitle);
         if (!pages.containsKey(post.getTitle())) {
-            Category postCat = postRepository.findCategoryById(post.getId());
+            Category postCat = post.getCategory();
             addCategory(postCat.getUid());
             pages.put(postTitle, new PageDTO(postTitle, "/categories/" + postCat.getName() + "/" + post.getId(), postCat.getUid()));
         }

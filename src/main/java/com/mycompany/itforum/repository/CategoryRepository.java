@@ -11,7 +11,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("""
            SELECT c
-           FROM categories c
+           FROM Category c
            LEFT JOIN c.posts p
            GROUP BY c.id
            ORDER BY COUNT(p) DESC

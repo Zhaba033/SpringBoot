@@ -14,11 +14,9 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends JpaRepository<Post, Long> {
     
     
-    @Query("SELECT p FROM Post p ORDER BY p.сreatedTime DESC")
+    @Query("SELECT p FROM Post p ORDER BY p.createdTime DESC")
     List<Post> findRecent(Pageable pageable);
-    List<Post> findByCategoryOrderByCreatedTimeDesc(String category);
-    
-    Category findCategoryById(Long id);
+    List<Post> findByCategoryOrderByCreatedTimeDesc(Category category);
     
     Post findByTitle(String title);
     Post findByCommentsId(Long id);

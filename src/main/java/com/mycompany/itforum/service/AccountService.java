@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AccountService {
     
-    PasswordEncoder passwordEncoder;
-    AccountRepository accountRepository;
+    final PasswordEncoder passwordEncoder;
+    final AccountRepository accountRepository;
     
     public void createAccount(Account a) {
         a.setPassword(passwordEncoder.encode(a.getPassword()));
@@ -19,7 +19,7 @@ public class AccountService {
     }
     
     public void changePassword(Account a, String newPassword) {
-        a.setPassword(passwordEncoder.encode(a.getPassword()));
+        a.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(a);
     }
     
