@@ -197,27 +197,5 @@
     "timeFromNow" : "20 часов назад",
     "createdDate" : "2026-07-22T14:01:59.8283541",
     "comments" : { }
-  },
-  "18" : {
-    "author" : "igor",
-    "category" : "123",
-    "title" : "456",
-    "body" : "sdfsd",
-    "code" : "window.alert('hello');",
-    "id" : "18",
-    "timeFromNow" : "19 часов назад",
-    "createdDate" : "2026-07-22T15:08:05.9083983",
-    "comments" : { }
-  },
-  "19" : {
-    "author" : "igor",
-    "category" : "123",
-    "title" : "321",
-    "body" : "!",
-    "code" : "",
-    "id" : "19",
-    "timeFromNow" : "",
-    "createdDate" : "2026-07-23T09:43:53.9686747",
-    "comments" : { }
   }
 }

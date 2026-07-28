@@ -13,7 +13,7 @@
   },
   "admin" : {
     "username" : "admin",
-    "password" : "$2a$10$uPVQDl06ESK5lFIyEAs8AuQqFRXvGwLeMoSyWyhq.nLWGSUEMM7YS",
+    "password" : "$2a$10$1aS4CjTk0OwxHKMY35NxfO/MwisCcG.SZshGw8i7pDW9DAzvt7nJ2",
     "roles" : [ "USER", "MODERATOR" ],
     "createdTime" : "2026-07-21T11:25:03.6128951"
   },

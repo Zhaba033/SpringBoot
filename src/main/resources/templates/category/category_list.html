@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head th:replace="fragments.html :: head(title='Категории')"></head>
+
+<body>
+
+    <header th:insert="fragments.html :: header"></header>
+    <div class="site-wrapper">
+
+        <div th:insert="fragments.html :: breadcrumbs(list=${breadcrumbs})"></div>
+
+        <section>
+            <h2>Категории форума</h2>
+        </section>
+
+        <div style="margin: 10px 0 10px 0;">
+            <form id="f" th:action="@{''}" method="GET">
+                <span>Сортировка: </span>
+                <select name="filter" onchange="document.getElementById('f').submit()">
+                    <option th:selected="${filter=='newest'}" value="newest">Сначала новые</option>
+                    <option th:selected="${filter=='oldest'}" value="oldest">Сначала старые</option>
+                    <option th:selected="${filter=='popular'}" value="popular">По популярности</option>
+                </select>
+            </form>
+        </div>
+
+        <div class="homepage-block">
+            <ul class="publication-list">
+                <div th:each="category : ${categories}" class="moderable-item">
+                    <a th:href="@{'/categories/'+${category.id}}" href="/categories/test" class="category-item">
+                        <div class="category-content">
+                            <h3 th:text="${category.name}">Название</h3>
+                            <p th:text="${category.description}">Описание</p>
+                            <div class="category-meta">
+                                <span class="posts"><i class="far fa-comment-dots"></i>Публикаций:
+                                    <span
+                                        th:text="${category.posts != null ? #lists.size(category.posts) : 0}">0</span>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <form
+                        th:replace="fragments.html :: delete(path=@{/moderator/categories/} + ${category.id} + @{/delete})">
+                    </form>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <footer th:insert="fragments.html :: footer"></footer>
+
+</body>
+
+</html>

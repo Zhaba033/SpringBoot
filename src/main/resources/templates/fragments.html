@@ -29,7 +29,7 @@
             </div>
             <div class="nav-links">
                 <a href="/create-post">Опубликовать</a>
-                <a href="/categories">Категории</a>
+                <a href="/category-list">Категории</a>
                 <a href="/">Главная</a>
                 <div class="account-dropdown">
                     <button type="button" class="account-dropdown__toggle" aria-haspopup="true" aria-expanded="false">
@@ -115,24 +115,25 @@
 
 
     <!--  PAGES COUNTER  -->
-    <div style="justify-content: center; display: flex;" th:fragment="page-counter (maxOnPageGiven, objectsGiven)">
+    <div style="justify-content: center; display: flex;" th:fragment="page-counter (maxOnPage, objects)">
 
-        <form method="get" th:action="@{''}" th:with="
-        maxOnPage=${T(java.lang.Integer).parseInt(maxOnPageGiven)},
-        objects=${T(java.lang.Integer).parseInt(objectsGiven)},
-        maxPages=(${#numbers.formatDecimal(T(java.lang.Math).ceil( (objects/1.0) / maxOnPage ), 1, 0)})">
+        <form method="get" th:action="@{''}"
+            th:with="maxPages=(${#numbers.formatDecimal(T(java.lang.Math).ceil( (objects/1.0) / maxOnPage ), 1, 0)})">
+
+            <th:block th:each="p : ${#request.parameterMap}">
+                <input type="hidden" th:if="${p.key}!='page'" th:name="${p.key}" th:value="${p.value[0]}">
+            </th:block>
+
             <button name="page" th:class="${page==1} ? 'page-btn--active page-btn' : page-btn" th:if="${maxPages}>1"
                 value="1">1</button>
             <span th:if="${page}>=4 and ${maxPages}>5">...</span>
 
             <span
                 th:with="dynamicPage = ${maxPages}>4 ? ((${page}>2 and (${maxPages}-${page})>2) ? ${page}-1 : ((${page}<=2) ? 2 : (${maxPages}-3))) : 2">
-                <button name="page" th:class="${page}==${dynamicPage} ? 'page-btn--active page-btn' : page-btn"
-                    th:if="${maxPages}>1" th:text="${dynamicPage}" th:value="${dynamicPage}">2</button>
-                <button name="page" th:class="${page}==${dynamicPage+1} ? 'page-btn--active page-btn' : page-btn"
-                    th:if="${maxPages}>2" th:text="${dynamicPage}+1" th:value="${dynamicPage}+1">3</button>
-                <button name="page" th:class="${page}==${dynamicPage+2} ? 'page-btn--active page-btn' : page-btn"
-                    th:if="${maxPages}>3" th:text="${dynamicPage}+2" th:value="${dynamicPage}+2">4</button>
+                <button name="page" th:each="i : ${#numbers.sequence(0, 2)}"
+                    th:class="(${page}==${dynamicPage} + ${i}) ? 'page-btn--active page-btn' : page-btn"
+                    th:if="${maxPages} > ${i+1}" th:text="${dynamicPage} + ${i}"
+                    th:value="${dynamicPage} + ${i}">2</button>
             </span>
             <span th:if="${maxPages}-${page}>=3 and ${maxPages}>5">...</span>
             <button name="page" th:class="${page}==${maxPages} ? 'page-btn--active page-btn' : page-btn"

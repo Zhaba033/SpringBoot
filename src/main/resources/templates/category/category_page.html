@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head th:replace="fragments.html :: head(title='Категория: ' + ${category.name})"></head>
+
+<body>
+
+
+    <header th:insert="fragments.html :: header"></header>
+
+    <div class="site-wrapper">
+
+        <div th:insert="fragments.html :: breadcrumbs(list=${breadcrumbs})"></div>
+
+        <section>
+            <h2 style="display: inline-block" th:text="${category.name} + ':'">name</h2>
+            <span style="margin-left: 4px;" th:text="${category.description}">desc</span>
+        </section>
+
+        <div style="padding: 20px 0 20px 0;">
+            <a class="home-action" th:href="@{/create-post} + '?category=' + ${category.id}">Создать пост в этой
+                категории</a>
+        </div>
+
+        <div style="margin-top: 15px;" class="category-view">
+            <h3 class="category-view-heading">Публикации в категории:</h3>
+            <div style="margin: 10px 0 10px 0;">
+                <form id="f" th:action="@{''}" method="GET">
+                    <span>Сортировка: </span>
+                    <select name="filter" onchange="document.getElementById('f').submit()">
+                        <option th:selected="${filter=='newest'}" value="newest">Сначала новые</option>
+                        <option th:selected="${filter=='oldest'}" value="oldest">Сначала старые</option>
+                        <option th:selected="${filter=='actual'}" value="actual">По популярности</option>
+                    </select>
+                </form>
+            </div>
+            <ul class="publication-list"
+                th:with="maxOnPage=5, page=(${param.page==null} ? 1 : ${T(java.lang.Integer).parseInt(param.page)})">
+                <li th:each="post, iterStat : ${posts}"
+                    th:if="${iterStat.count>(page-1)*maxOnPage} and ${iterStat.count<(page)*maxOnPage+1}"
+                    class="moderable-item">
+                    <a th:href="@{'/post/' + ${post.key}}" href="#" class="publication-preview">
+                        <div class="publication-preview-main">
+                            <span th:text="'От: ' + ${post.value.author}" class="publication-comments">Автор</span>
+                            <span th:text="${post.value.title}" class="publication-title">Заголовок</span>
+                            <p th:text="${post.value.body}" class="publication-excerpt">Краткое описание</p>
+                        </div>
+                        <div class="publication-preview-meta">
+                            <span class="publication-age" th:text="${post.value.timeFromNow}"><i
+                                    class="far fa-clock"></i>
+                            </span>
+                            <span th:text="'Комментариев: ' + ${#maps.size(post.value.comments)}"
+                                class="publication-comments"> 23 комментария
+                            </span>
+                            <div th:if="${#maps.size(post.value.comments)!=0}">
+                                <p th:each="entry, stat : ${post.value.comments}" th:if="${stat.last}"
+                                    class="publication-age"
+                                    th:text="'Последний от ' + ${entry.value.author} +' ' + ${entry.value.timeFromNow}">
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    <form th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${post.key} + @{/delete})">
+                    </form>
+                </li>
+                <div th:insert="fragments.html :: page-counter(maxOnPage=${maxOnPage}, objects=${#maps.size(posts)})">
+                </div>
+            </ul>
+        </div>
+    </div>
+
+    <footer th:insert="fragments.html :: footer"></footer>
+
+</body>
+
+</html>
