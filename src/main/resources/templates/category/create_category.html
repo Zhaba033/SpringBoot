@@ -14,19 +14,15 @@
         </div>
     </section>
 
-    <div th:insert="fragments.html :: banned(text='Вы не можете создавать категории, будучи в бане.')"></div>
-
-    <div th:insert="fragments.html :: register(text='Чтобы создавать категории.')"></div>
-
-    <div sec:authorize="hasRole('ROLE_USER')" class="container">
+    <div class="container">
         <form class="topic-form category-form" th:action="@{/moderator/new-category/create}" method="POST">
             <div class="form-group">
                 <label for="category_uid">Идентификатор категории</label>
-                <input type="text" id="category_id" name="category_id" class="category-id-input"
+                <input type="text" id="uid" name="uid" class="category-id-input"
                     placeholder="Например: backend-java" required>
-                <span th:if="${alreadyExists!=null}" style="color: red;" class="form-hint">Категория с ID <strong
+                <span th:if="${param.alreadyExists!=null}" style="color: red;" class="form-hint">Категория с UID <strong
                         th:text="${alreadyExists}"></strong> уже существует!</span>
-                <span th:if="${alreadyExists==null}" class="form-hint">Используйте короткий уникальный идентификатор
+                <span th:if="${param.alreadyExists==null}" class="form-hint">Используйте короткий уникальный идентификатор
                     латиницей.</span>
             </div>
 
@@ -43,7 +39,6 @@
             </div>
 
             <div class="form-actions">
-                <button type="reset" class="btn-secondary">Очистить</button>
                 <button type="submit" class="btn-secondary">Создать категорию</button>
             </div>
         </form>

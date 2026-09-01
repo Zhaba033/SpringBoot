@@ -2,11 +2,9 @@ package com.mycompany.itforum.controller;
 
 import com.mycompany.itforum.entity.Account;
 import com.mycompany.itforum.repository.AccountRepository;
-import com.mycompany.itforum.repository.CategoryRepository;
 import com.mycompany.itforum.service.PageService;
-import com.mycompany.itforum.repository.PostRepository;
 import com.mycompany.itforum.service.AccountService;
-import java.time.format.DateTimeFormatter;
+import com.mycompany.itforum.utils.TimeFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -22,20 +20,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public abstract class AccountController {
+public class AccountController {
     
     final AccountRepository accountRepository;
 
     final AccountService accountService;
     final PageService pageService;
 
+    
+    
     // LOGOUT
     @GetMapping("/logout_confirm")
     public String logoutConfirmPage(
             Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("username", auth.getName());
-        return "auth/logout";
+        return "account/logout";
     }
 
     @GetMapping("/auth/logout_success")
@@ -79,7 +79,7 @@ public abstract class AccountController {
             return "redirect:/auth/register";
         }
 
-        log.info("New account: " + account.toString());
+        log.info("New account: " + account.getUsername());
         accountService.createAccount(account);
         return "redirect:/auth/login";
     }
@@ -92,13 +92,8 @@ public abstract class AccountController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         Account user = accountRepository.findByUsername(auth.getName());
-        model.addAttribute("roles", user.getRoles());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-        String date = user.getCreatedTime().format(formatter);
-
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("registration_date", date);
+        model.addAttribute("user", user);
 
         return "account/profile";
     }
@@ -116,7 +111,7 @@ public abstract class AccountController {
             model.addAttribute("error", "true");
         }
 
-        return "account/change-password";
+        return "account/change_password";
 
     }
 

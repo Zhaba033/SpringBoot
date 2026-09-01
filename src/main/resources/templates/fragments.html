@@ -10,7 +10,6 @@
 
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" th:href="@{/css/notai.css}">
-    <script type="text/javascript" th:src="@{/js/main.js}"></script>
 
     <link rel="stylesheet" th:href="@{/js/highlight/styles/default.css}">
     <script type="text/javascript" th:src="@{/js/highlight/highlight.js}"></script>
@@ -130,6 +129,7 @@
 
             <span
                 th:with="dynamicPage = ${maxPages}>4 ? ((${page}>2 and (${maxPages}-${page})>2) ? ${page}-1 : ((${page}<=2) ? 2 : (${maxPages}-3))) : 2">
+                <span id="page-number" th:text="${dynamicPage}" style="display: none;"></span>
                 <button name="page" th:each="i : ${#numbers.sequence(0, 2)}"
                     th:class="(${page}==${dynamicPage} + ${i}) ? 'page-btn--active page-btn' : page-btn"
                     th:if="${maxPages} > ${i+1}" th:text="${dynamicPage} + ${i}"

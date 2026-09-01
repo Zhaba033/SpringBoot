@@ -27,14 +27,14 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "post_seq")
     Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     String title;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     String body;
-    @Column()
+    @Column(columnDefinition = "TEXT")
     String code;
 
     @ManyToOne(fetch = FetchType.LAZY)

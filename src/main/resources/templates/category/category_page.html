@@ -22,54 +22,72 @@
                 категории</a>
         </div>
 
-        <div style="margin-top: 15px;" class="category-view">
+        <div th:with="posts = (${category.posts})" th:if="${category.posts != null}" style="margin-top: 15px;"
+            class="category-view">
             <h3 class="category-view-heading">Публикации в категории:</h3>
             <div style="margin: 10px 0 10px 0;">
                 <form id="f" th:action="@{''}" method="GET">
                     <span>Сортировка: </span>
                     <select name="filter" onchange="document.getElementById('f').submit()">
                         <option th:selected="${filter=='newest'}" value="newest">Сначала новые</option>
-                        <option th:selected="${filter=='oldest'}" value="oldest">Сначала старые</option>
-                        <option th:selected="${filter=='actual'}" value="actual">По популярности</option>
+                        <option th:selected="${filter=='popular7days'}" value="popular7days">Самые обсуждаемые за 7 дней
+                        </option>
+                        <option th:selected="${filter=='popular30days'}" value="popular30days">Самые обсуждаемые за
+                            месяц</option>
+                        <option th:selected="${filter=='popularAll'}" value="popularAll">Самые обсуждаемые за всё время
+                        </option>
                     </select>
                 </form>
             </div>
             <ul class="publication-list"
                 th:with="maxOnPage=5, page=(${param.page==null} ? 1 : ${T(java.lang.Integer).parseInt(param.page)})">
-                <li th:each="post, iterStat : ${posts}"
+                <li th:each="i, iterStat : ${#numbers.sequence(posts.size()-1, 0, -1)}" th:with="post = ${posts[i]}"
                     th:if="${iterStat.count>(page-1)*maxOnPage} and ${iterStat.count<(page)*maxOnPage+1}"
                     class="moderable-item">
-                    <a th:href="@{'/post/' + ${post.key}}" href="#" class="publication-preview">
+                    <a th:href="@{'/post/' + ${post.id}}" href="#" class="publication-preview">
                         <div class="publication-preview-main">
-                            <span th:text="'От: ' + ${post.value.author}" class="publication-comments">Автор</span>
-                            <span th:text="${post.value.title}" class="publication-title">Заголовок</span>
-                            <p th:text="${post.value.body}" class="publication-excerpt">Краткое описание</p>
+                            <span th:text="'От: ' + ${post.author.username}" class="publication-comments">Автор</span>
+                            <span th:text="${post.title}" class="publication-title">Заголовок</span>
+                            <p th:text="${post.body}" class="publication-excerpt">Краткое описание</p>
                         </div>
                         <div class="publication-preview-meta">
-                            <span class="publication-age" th:text="${post.value.timeFromNow}"><i
+                            <span class="publication-age" th:text="${@timeFormatter.fromNow(post.createdTime)}"><i
                                     class="far fa-clock"></i>
                             </span>
-                            <span th:text="'Комментариев: ' + ${#maps.size(post.value.comments)}"
+                            <span th:text="'Комментариев: ' + ${#lists.size(post.comments)}"
                                 class="publication-comments"> 23 комментария
                             </span>
-                            <div th:if="${#maps.size(post.value.comments)!=0}">
-                                <p th:each="entry, stat : ${post.value.comments}" th:if="${stat.last}"
-                                    class="publication-age"
-                                    th:text="'Последний от ' + ${entry.value.author} +' ' + ${entry.value.timeFromNow}">
+                            <div th:if="${#lists.size(post.comments)!=0}">
+                                <p th:each="com, stat : ${post.comments}" th:if="${stat.last}" class="publication-age"
+                                    th:text="'Последний от ' + ${com.author.username} +' ' + ${@timeFormatter.fromNow(com.createdTime)}">
                                 </p>
                             </div>
                         </div>
                     </a>
-                    <form th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${post.key} + @{/delete})">
+                    <form th:replace="fragments.html :: delete(path=@{/moderator/post/} + ${post.id} + @{/delete})">
                     </form>
                 </li>
-                <div th:insert="fragments.html :: page-counter(maxOnPage=${maxOnPage}, objects=${#maps.size(posts)})">
+                <div th:insert="fragments.html :: page-counter(maxOnPage=${maxOnPage}, objects=${#lists.size(posts)})">
                 </div>
             </ul>
         </div>
     </div>
 
     <footer th:insert="fragments.html :: footer"></footer>
+
+    <script th:inline="javascript">
+
+        async function getPosts(page) {
+            categoryId = /*[[${category.id}]]*/ '';
+            const response = await fetch('/api/category/' + categoryId + '/posts/' + page);
+            const data = await response.json();
+            console.log(data);
+        }
+
+        getPosts(0);
+
+
+    </script>
 
 </body>
 

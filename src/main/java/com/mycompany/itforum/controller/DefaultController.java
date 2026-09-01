@@ -1,10 +1,11 @@
 package com.mycompany.itforum.controller;
 
-import com.mycompany.itforum.repository.AccountRepository;
+import com.mycompany.itforum.entity.Category;
 import com.mycompany.itforum.repository.CategoryRepository;
 import com.mycompany.itforum.repository.PostRepository;
-import com.mycompany.itforum.service.AccountService;
 import com.mycompany.itforum.service.PageService;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +30,9 @@ public class DefaultController {
 
         model.addAttribute("breadcrumbs", pageService.getPages("home", ""));
         model.addAttribute("posts", postRepository.findRecent(PageRequest.of(0, 5)));
-        model.addAttribute("categories", categoryRepository.findTop().subList(0, 3));
+        
+        List<Category> cats = categoryRepository.findTop();
+        model.addAttribute("categories", cats.subList(0, Math.min(3, cats.size())));
 
         return "default/home";
     }
@@ -38,11 +41,13 @@ public class DefaultController {
     public String result(
             @ModelAttribute(name = "code") String code,
             @ModelAttribute(name = "text") String text,
+            @ModelAttribute(name = "link") Optional<String> link,
             Model model
     ) {
         if (code.isEmpty()) {
             return "redirect:/";
         }
+        model.addAttribute("link", link.orElse(null));
         model.addAttribute("code", code);
         model.addAttribute("text", text);
         return "default/result";

@@ -854,7 +854,7 @@ a.publication-preview:focus-visible {
     padding-bottom: 14px;
     border-bottom: #5b6e8c 1px;
     overflow-wrap: break-word;
-    word-break: normal;
+    max-width: 1000px;
 }
 
 .post-created {
@@ -1164,7 +1164,7 @@ a.publication-preview:focus-visible {
    profile.html
    ========================= */
 .profile-card {
-    max-width: 560px;
+    max-width: 777px;
     margin: 0 auto 48px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -1556,7 +1556,7 @@ a.publication-preview:focus-visible {
     margin: 0 auto;
     align-items: center;
     gap: 16px;
-    background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%);
+    background: #eef2ff;
     border: 2px solid #2563eb;
     border-radius: 16px;
     padding: 16px 24px;
@@ -1571,7 +1571,7 @@ a.publication-preview:focus-visible {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
     border-color: #1d4ed8;
-    background: linear-gradient(135deg, #e0e7ff 0%, #ffffff 100%);
+    background: #dae2ff 100%;
 }
 
 .register-banner__icon {
@@ -1585,11 +1585,6 @@ a.publication-preview:focus-visible {
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
-    transition: transform 0.3s ease;
-}
-
-.register-banner:hover .register-banner__icon {
-    transform: scale(1.1);
 }
 
 .register-banner__content {
@@ -1614,18 +1609,14 @@ a.publication-preview:focus-visible {
     flex-shrink: 0;
     color: #2563eb;
     font-size: 1.2rem;
-    transition: transform 0.3s ease;
 }
 
-.register-banner:hover .register-banner__arrow {
-    transform: translateX(4px);
-}
 
 /* =========================
    Recent posts (последние посты на главной)
    ========================= */
 .homepage-block {
-    margin-bottom: 48px;
+    padding-top: 15px;
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -1757,4 +1748,124 @@ a.publication-preview:focus-visible {
 .page-btn--active:hover {
     background: #2563eb;
     transform: none;
+}
+
+/* =========================
+   moderator.html
+   ========================= */
+
+.moderator-panel {
+    max-width: 720px;
+    margin: 0 auto 48px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 28px;
+}
+
+.moderator-search {
+    margin-bottom: 24px;
+}
+
+.moderator-search input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.moderator-search input:focus {
+    outline: none;
+}
+
+.account-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.account-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #ffffff;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.account-item:hover {
+    border-color: #94a3b8;
+    box-shadow: 0 4px 14px -6px rgba(15, 23, 42, .12);
+}
+
+.account-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.account-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.modbtn {
+    background: #ffffff;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 18px;
+    padding-top: 5px;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modbtn-danger {
+    color: rgb(255, 49, 49);
+}
+
+.modbtn-dobro {
+    color: rgb(115, 255, 0);
+}
+
+.modbtn-danger:hover {
+    background: #b91c1c;
+    border: none;
+    color: white;
+}
+
+.modbtn-dobro:hover {
+    background: rgb(115, 255, 0);
+    border: none;
+    color: white;
+}
+
+@media (max-width:768px) {
+    .moderator-panel {
+        padding: 20px;
+    }
+
+    .account-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .account-actions {
+        width: 100%;
+    }
+
+    .account-actions button {
+        flex: 1;
+    }
 }

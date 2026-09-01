@@ -26,7 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_seq")
     Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,7 +37,7 @@ public class Comment {
     @JoinColumn(name = "account_id")
     Account author;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     String comment;
 
     @Column(nullable = false, updatable = false)

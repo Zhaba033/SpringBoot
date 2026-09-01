@@ -32,12 +32,13 @@ public class PageService {
         pages.put("categories", new PageDTO("Категории", "/category-list", "home"));
         pages.put("profile", new PageDTO("Профиль", "/account/profile", "home"));
         pages.put("change-password", new PageDTO("Сменить пароль", "/account/change-password", "profile"));
+        pages.put("moderator-panel", new PageDTO("Панель модератора", "/moderator/panel", "home"));
     }
     
     private void addCategory(String catUid) {
         Category cat = categoryRepository.findByUid(catUid);
         if (!pages.containsKey(catUid)) {
-            pages.put(catUid, new PageDTO(cat.getName(), "/categories/" + cat.getName(), "categories"));
+            pages.put(catUid, new PageDTO(cat.getName(), "/category/" + catUid, "categories"));
         }
     }
     

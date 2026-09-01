@@ -21,7 +21,7 @@
             <ul class="publication-list">
 
                 <div th:each="category : ${categories}" class="moderable-item">
-                    <a th:href="@{'/categories/'+${category.id}}" class="category-item">
+                    <a th:href="@{'/category/'+${category.uid}}" class="category-item">
                         <div class="category-content">
                             <h3 th:text="${category.name}">Название</h3>
                             <p th:text="${category.description}">Описание</p>
@@ -34,7 +34,7 @@
                     </a>
 
                     <form
-                        th:replace="fragments.html :: delete(path=@{/moderator/categories/} + ${category.id} + @{/delete})">
+                        th:replace="fragments.html :: delete(path=@{/moderator/category/} + ${category.id} + @{/delete})">
                     </form>
                 </div>
 
@@ -52,24 +52,24 @@
                 <li th:each="post : ${posts}" class="moderable-item">
                     <a th:href="@{/post/} + ${post.id}" href="#" class="publication-preview">
                         <div class="publication-preview-main">
-                            <span th:text="'От: ' + ${post.author}" class="publication-comments">Автор</span>
+                            <span th:text="'От: ' + ${post.author.username}" class="publication-comments">Автор</span>
                             <span class="publication-title">
                                 <span th:text="${post.title}" ></span>
-                                <span style="margin-left: 10px;" th:text="'Категория: ' + ${post.category}" class="publication-category"></span>
+                                <span style="margin-left: 10px;" th:text="'Категория: ' + ${post.category.name}" class="publication-category"></span>
                             </span>
                             <p th:text="${post.body}" class="publication-excerpt">Описание</p>
                         </div>
                         <div class="publication-preview-meta">
-                            <span th:text="${post.timeFromNow}" class="publication-age">
+                            <span th:text="${@timeFormatter.fromNow(post.createdTime)}" class="publication-age">
                                 <i class="far fa-clock"></i> 2 часа назад
                             </span>
-                            <span th:text="'Комментариев: ' + ${#maps.size(post.comments)}"
+                            <span th:text="'Комментариев: ' + ${#lists.size(post.comments)}"
                                 class="publication-comments">
                                 <i class="far fa-comment"></i> 23 комментария
                             </span>
-                            <div th:if="${#maps.size(post.comments)!=0}">
-                                <p th:each="entry, stat : ${post.comments}" th:if="${stat.last}" class="publication-age"
-                                 th:text="'Последний от ' + ${entry.value.author} +' ' + ${entry.value.timeFromNow}"> 
+                            <div th:if="${#lists.size(post.comments)!=0}">
+                                <p th:each="com, stat : ${post.comments}" th:if="${stat.last}" class="publication-age"
+                                 th:text="'Последний от ' + ${com.author.username} +' ' + ${@timeFormatter.fromNow(com.createdTime)}"> 
                                 </p>
                             </div>
                         </div>

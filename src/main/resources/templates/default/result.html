@@ -15,6 +15,7 @@
                 <span class="result-card__icon" aria-hidden="true"><i class="fas fa-check-circle"></i></span>
                 <h1 class="result-card__title">Успешно!</h1>
                 <p th:text="${text}" class="result-card__text"></p>
+                <a th:if="${link!=null}" th:href="${link}" class="result-card__text link">Вернуться обратно</a>
             </section>
 
             <section th:if="${code}=='300'" class="result-card result-card--changed">

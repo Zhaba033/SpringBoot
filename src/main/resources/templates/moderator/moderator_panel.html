@@ -8,22 +8,57 @@
     <header th:insert="fragments.html :: header"></header>
 
     <div class="site-wrapper">
+        <div th:insert="fragments.html :: breadcrumbs(list=${breadcrumbs})"></div>
+
         <section class="hero">
             <div class="container">
                 <h2>Панель модератора</h2>
             </div>
         </section>
 
-        <section class="profile-card">
-            <dl class="profile-card__info">
-                <div>
+        <section class="moderator-panel">
+            <div class="moderator-search">
+                <input id="search" placeholder="Поиск пользователя...">
+            </div>
 
-                </div>
-            </dl>
+
+            <ul class="account-list" id="quicksearch">
+                <li class="account-item" th:each="account : ${accounts}" style="list-style-type: none;">
+                    <span class="account-name" th:text="${account.username}"></span>
+                    <span th:insert="fragments.html :: roles(roles=${account.roles})">Роли</span>
+                    <div class="account-actions">
+                        <form th:if="${!#lists.contains(account.roles, 'BANNED')}"
+                            th:action="|/moderator/manage/${account.username}/ban|" method="POST"
+                            style="display: inline;">
+                            <button class="modbtn modbtn-danger" type="submit">Забанить</button>
+                        </form>
+                        <form th:if="${#lists.contains(account.roles, 'BANNED')}"
+                            th:action="|/moderator/manage/${account.username}/unban|" method="POST"
+                            style="display: inline;">
+                            <button class="modbtn modbtn-dobro" type="submit">Разбанить</button>
+                        </form>
+                        <form th:if="${#lists.contains(account.roles, 'MODERATOR')}"
+                            th:action="|/moderator/manage/${account.username}/removeModeratorRole|" method="POST"
+                            style="display: inline;">
+                            <button class="modbtn modbtn-danger" type="submit">Снять роль модератора</button>
+                        </form>
+                        <form
+                            th:if="${!#lists.contains(account.roles, 'MODERATOR')} and ${!#lists.contains(account.roles, 'BANNED')}"
+                            th:action="|/moderator/manage/${account.username}/giveModeratorRole|"
+                            style="display: inline;" method="POST">
+                            <button class="modbtn modbtn-dobro" type="submit">Дать роль модератора</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+
+
         </section>
     </div>
 
     <footer th:insert="fragments.html :: footer"></footer>
+
+    <script type="text/javascript" th:src="@{/js/search.js}"></script>
 
 </body>
 

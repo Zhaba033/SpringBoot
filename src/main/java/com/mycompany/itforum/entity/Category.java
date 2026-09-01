@@ -23,7 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Category {
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq")
     @Id
     Long id;
 

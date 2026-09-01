@@ -18,19 +18,21 @@
             </div>
         </section>
 
+        <div sec:authorize="!isAuthenticated()" th:insert="fragments.html :: register(text='Нет информации о вашем аккаунте.')"></div>
 
-        <section class="profile-card">
+
+        <section sec:authorize="isAuthenticated()" class="profile-card">
             <div class="profile-card__avatar" aria-hidden="true">
                 <i class="fas fa-user"></i>
             </div>
             <dl class="profile-card__info">
                 <div class="profile-card__row">
                     <dt>Имя пользователя</dt>
-                    <dd th:text="${username}">igor_dev</dd>
+                    <dd sec:authentication="name">igor_dev</dd>
                 </div>
                 <div class="profile-card__row">
                     <dt>Дата регистрации</dt>
-                    <dd th:text="${registration_date}">15 января 2026</dd>
+                    <dd th:text="${@timeFormatter.formatTime(user.createdTime)}">15 января 2026</dd>
                 </div>
                 <div class="profile-card__row">
                     <dt>Роль</dt>

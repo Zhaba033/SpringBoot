@@ -10,25 +10,14 @@
 
         <div th:insert="fragments.html :: breadcrumbs(list=${breadcrumbs})"></div>
 
-        <section>
+        <section >
             <h2>Категории форума</h2>
         </section>
-
-        <div style="margin: 10px 0 10px 0;">
-            <form id="f" th:action="@{''}" method="GET">
-                <span>Сортировка: </span>
-                <select name="filter" onchange="document.getElementById('f').submit()">
-                    <option th:selected="${filter=='newest'}" value="newest">Сначала новые</option>
-                    <option th:selected="${filter=='oldest'}" value="oldest">Сначала старые</option>
-                    <option th:selected="${filter=='popular'}" value="popular">По популярности</option>
-                </select>
-            </form>
-        </div>
-
+        
         <div class="homepage-block">
             <ul class="publication-list">
                 <div th:each="category : ${categories}" class="moderable-item">
-                    <a th:href="@{'/categories/'+${category.id}}" href="/categories/test" class="category-item">
+                    <a th:href="@{'/category/'+${category.uid}}" href="/categories/test" class="category-item">
                         <div class="category-content">
                             <h3 th:text="${category.name}">Название</h3>
                             <p th:text="${category.description}">Описание</p>
@@ -42,7 +31,7 @@
                     </a>
 
                     <form
-                        th:replace="fragments.html :: delete(path=@{/moderator/categories/} + ${category.id} + @{/delete})">
+                        th:replace="fragments.html :: delete(path=@{/moderator/categories/} + ${category.uid} + @{/delete})">
                     </form>
                 </div>
             </ul>

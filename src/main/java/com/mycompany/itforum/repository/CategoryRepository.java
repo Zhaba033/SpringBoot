@@ -1,6 +1,7 @@
 package com.mycompany.itforum.repository;
 
 import com.mycompany.itforum.entity.Category;
+import com.mycompany.itforum.entity.Post;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
