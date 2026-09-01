@@ -19,14 +19,17 @@ Spring boot 2.7.8
 **Структура проекта:**
 Controller → Service → Repository → Entity, PostgreSQL, Spring Security
 
-**Скриншоты:**
-![Главная страница](https://prnt.sc/rPfoZRNRvKdO)
-![Логин](https://prnt.sc/2JO4oqbSTbRZ)
-![Страница поста](https://prnt.sc/lVELzAjsfsDD)
-
 **Запуск**
 
 1. Скачайте файлы из последнего релиза репозитория.
 2. Запустите compose.yaml с помощью docker:
    ```docker compose up -d```
 3. Порт - 8080.
+
+**Скриншоты:**
+
+<img width="1919" height="1199" alt="image" src="https://github.com/user-attachments/assets/056ad089-8fbc-49ec-9de1-21e49f670bb0" />
+
+<img width="1919" height="1199" alt="image" src="https://github.com/user-attachments/assets/36c4c1f1-7638-4936-9568-9e3a0fe6b4f9" />
+
+<img width="1919" height="1025" alt="image" src="https://github.com/user-attachments/assets/632abb6d-bd75-4320-80ef-36ff4f4265ff" />
